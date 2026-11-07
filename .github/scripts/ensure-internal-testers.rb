@@ -102,7 +102,7 @@ def add_tester(email:, group_id:, token:)
   end
 end
 
-# 追加できなかったときに、原因を追う手がかりを集める（Issue #212。409 の応答には理由が書かれない）。
+# 追加できなかったときに、原因を追う手がかりを集める（409 の応答には理由が書かれない）。
 # メールアドレス・氏名は出さない。ほかのアプリのグループは、名前を出さず数だけにする（公開前のアプリの名前が出ないように）
 def failure_hints(email:, app_id:, token:)
   tester_hints(email: email, app_id: app_id, token: token) + user_hints(email: email, app_id: app_id, token: token)
