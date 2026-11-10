@@ -137,8 +137,9 @@ struct ClearStampView: View {
 }
 
 /// 南京錠の形（パス専用の枠の鍵）。引き継ぎブックの 6 ページの見本のように、つると胴を同じ太さの線で描く。
-/// 線の太さを含めて与えた枠に収まる塗りの形を返す（`fill` で描く）
-struct LockShape: Shape {
+/// 線の太さを含めて与えた枠に収まる塗りの形を返す（`fill` で描く）。
+/// `Shape` の `path(in:)` は隔離のない要件なので、既定の MainActor に隔離しない（Xcode 27.1 ではビルドエラーになる）
+nonisolated struct LockShape: Shape {
     /// 線の太さ（枠の幅に対する割合）
     static let lineRatio: CGFloat = 0.14
 
