@@ -1,0 +1,7 @@
+{
+  "v": 1,
+  "project": "Shinkeisuijaku.xcodeproj",
+  "scheme": "Shinkeisuijaku",
+  "platforms": ["iOS"],
+  "uiTests": "ShinkeisuijakuUITests"
+}
