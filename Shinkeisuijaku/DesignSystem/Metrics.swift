@@ -147,6 +147,8 @@ enum Metrics {
     static let artCanvasSize: CGFloat = 108
     /// 絵の輪郭線の太さ（枠が `artCanvasSize` のときの値。色は `Palette.artOutline`）
     static let artOutlineWidth: CGFloat = 2.2
+    /// カード用の「ぴったりの枠」で、描いた部分の上下左右に足す余白（絵の元の枠の座標で。引き継ぎの一式の「ゆらぎの分の余白 約 1.5」）
+    static let artCardBoxMargin: CGFloat = 1.5
 
     // おうちの方への画面（引き継ぎブックに見本も値も無いので、ほかの画面の値に合わせて決めた）
     /// まとまり（見出し・パス・方針・リンク）どうしのすき間（スタンプちょうのまとまりと同じ）
