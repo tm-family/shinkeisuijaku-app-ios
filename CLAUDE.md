@@ -28,8 +28,9 @@
 ## 環境
 
 - Xcode 26.6 / iOS 17.0 以上（iOS 18 以降の API は `if #available` で囲む）
-- iPhone と iPad のユニバーサル（`TARGETED_DEVICE_FAMILY = "1,2"`）・ライトとダーク
-- 向きは iPhone が縦だけ、iPad が縦と逆さの縦だけ（`UIRequiresFullScreen = YES`）。開発言語は `ja`
+- iPhone のみ（`TARGETED_DEVICE_FAMILY = 1`。iPad では iPhone の画面を拡大した互換表示）・ライトとダーク。
+  Discussion #4 の Q2（ユニバーサル）は、改訂版の引き継ぎブック（2026-11-23、Issue #85）の答えで iPhone のみに置き換えた
+- 向きは縦だけ（`UIRequiresFullScreen = YES`）。開発言語は `ja`
 - Swift 6（言語モード 6・Strict Concurrency complete・既定の分離は MainActor。UI テストのターゲットだけ nonisolated）
 - SwiftUI・`@Observable` / Swift Testing（Unit）/ XCTest（UI テスト）/ SwiftLint 0.65.1（Build Tool Plugin と CI の `--strict`）
 - SPM のパッケージは SwiftLint のプラグインだけ。ほかのパッケージは足さない
