@@ -54,6 +54,24 @@ struct GameBoardTests {
         #expect(Set(pictures) == Set(Course.animalPictures))
     }
 
+    /// どうぶつコースの絵は動物だけの 10 種類（リンゴ・イチゴを外し、クマ・ブタを入れた）。むずかしい（10 ペア）では全部出る
+    @Test
+    func animalCourseUsesAnimalsOnly() {
+        let animals: Set<Picture> = [.cat, .fox, .panda, .frog, .chick, .penguin, .rabbit, .dog, .bear, .pig]
+        #expect(Course.animalPictures.count == 10)
+        #expect(Set(Course.animalPictures) == animals)
+        #expect(Course.animals.candidateCount == Difficulty.hard.pairCount)
+        let board = deal(.animals, .hard)
+        let dealt = Set(board.cards.compactMap { card -> Picture? in
+            if case let .picture(picture, _) = card.face {
+                return picture
+            }
+            return nil
+        })
+        #expect(dealt == animals)
+        #expect(!dealt.contains(.apple) && !dealt.contains(.strawberry))
+    }
+
     /// ひらがなコースは文字のカードと絵のカードがペアで、組は仕様書の表どおり。絵のカードは揃ったときの言葉を持つ
     @Test
     func hiraganaPairsMatchLetterAndPicture() {

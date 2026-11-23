@@ -70,8 +70,9 @@ enum Course: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    /// どうぶつコースの絵の候補（仕様書の 10 種類。毎回この中から選ぶ）
-    static let animalPictures: [Picture] = [.cat, .fox, .panda, .frog, .apple, .chick, .penguin, .rabbit, .dog, .strawberry]
+    /// どうぶつコースの絵の候補（改訂版の引き継ぎブックの `Art.animals` の、動物だけの 10 種類。毎回この中から選ぶ）。
+    /// リンゴ・イチゴは入れない（ひらがなコースとスタンプでは使う）
+    static let animalPictures: [Picture] = [.cat, .fox, .panda, .frog, .chick, .penguin, .rabbit, .dog, .bear, .pig]
 
     /// ひらがなコースの組の候補（仕様書の 10 組。濁点・半濁点のある字は使わない）
     static let hiraganaPairs: [HiraganaPair] = [
