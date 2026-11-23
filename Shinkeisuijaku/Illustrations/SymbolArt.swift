@@ -62,7 +62,7 @@ struct HintEyesView: View {
     }
 }
 
-/// ひらがなコースのシンボルの「あ」（パス専用のスタンプの中に置く）。丸ゴ W4 の文字で、太さは付けない（Q6）
+/// ひらがなコースのシンボルの「あ」（パス専用のスタンプの中に置く）。ひらがなカードと同じ丸ゴ（Zen Maru Gothic Bold）の文字で、太さは付けない
 struct HiraganaSymbolView: View {
     var body: some View {
         GeometryReader { proxy in
