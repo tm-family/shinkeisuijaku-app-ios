@@ -306,3 +306,5 @@ API が無い・アカウントで一度だけ行うなど、ワークフロー�
 ## License
 
 [MIT License](LICENSE)
+
+アプリに入れている書体 Zen Maru Gothic Bold（`Shinkeisuijaku/Fonts/ZenMaruGothic-Bold.ttf`）は、SIL Open Font License 1.1 です（ライセンス文は同じフォルダの [ZenMaruGothic-OFL.txt](Shinkeisuijaku/Fonts/ZenMaruGothic-OFL.txt)。アプリにも一緒に入れています）。

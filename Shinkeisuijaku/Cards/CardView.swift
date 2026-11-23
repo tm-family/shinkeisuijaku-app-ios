@@ -62,6 +62,28 @@ struct CardAppearance: Equatable {
     }
 }
 
+/// カードの表の中身の大きさ（改訂版の引き継ぎブックの「寸法」の「カードの中の絵」と、「文字」のひらがなカードの文字）。
+/// View から切り離した値の型にして、単体テストする
+struct CardFaceLayout: Equatable {
+    /// カード 1 枚の大きさ
+    let cardSize: CGSize
+
+    /// カードの短辺（文字の大きさの元）
+    var shortSide: CGFloat {
+        min(cardSize.width, cardSize.height)
+    }
+
+    /// 言葉の無い絵（どうぶつコース）の一辺: カードの幅の 95%。高さが足りないときは、高さの 98% まで
+    var pictureSide: CGFloat {
+        max(min(cardSize.width * Metrics.cardPictureWidthRatio, cardSize.height * Metrics.cardPictureHeightRatio), 0)
+    }
+
+    /// 言葉つきの絵（ひらがなコースの絵のカード）の一辺: 幅の 95% と、高さから言葉の分（短辺の 24%）を引いた大きさの小さい方
+    var pictureSideWithWord: CGFloat {
+        max(min(cardSize.width * Metrics.cardPictureWidthRatio, cardSize.height - shortSide * Metrics.cardWordAreaRatio), 0)
+    }
+}
+
 /// カード 1 枚。与えられた大きさいっぱいに描き、めくり・揃ったときの動きを付ける
 struct CardView: View {
     let face: Card.Face
@@ -86,14 +108,14 @@ struct CardView: View {
     var body: some View {
         let motion = MotionPolicy(reduceMotion: reduceMotion)
         GeometryReader { proxy in
-            let shortSide = min(proxy.size.width, proxy.size.height)
+            let layout = CardFaceLayout(cardSize: proxy.size)
             let appearance = CardAppearance(face: face, isFaceUp: isFaceUp, showsMatched: showsMatched)
             Color.clear
                 .modifier(
                     CardFlip(
                         angle: isFaceUp ? Motion.flipAngleDegrees : 0,
-                        back: { CardBackSide(shortSide: shortSide) },
-                        front: { CardFrontSide(appearance: appearance, shortSide: shortSide) }
+                        back: { CardBackSide(shortSide: layout.shortSide) },
+                        front: { CardFrontSide(appearance: appearance, layout: layout) }
                     )
                 )
                 .animation(motion.flipAnimation, value: isFaceUp)
@@ -180,10 +202,11 @@ private struct CardBackSide: View {
     }
 }
 
-/// カードの表: 文字か絵。揃ったら緑の地にし、ひらがなコースの絵のカードには言葉を出す
+/// カードの表: 文字か絵。揃ったら緑の地にし、ひらがなコースの絵のカードには言葉を出す。
+/// 絵はぴったりの枠で描き、カードの幅いっぱいに見せる
 private struct CardFrontSide: View {
     let appearance: CardAppearance
-    let shortSide: CGFloat
+    let layout: CardFaceLayout
 
     var body: some View {
         RoundedRectangle(cornerRadius: Metrics.cardCornerRadius)
@@ -192,24 +215,24 @@ private struct CardFrontSide: View {
                 switch appearance.face {
                 case let .letter(letter):
                     Text(verbatim: letter)
-                        .font(Typography.cardLetter(shortSide: shortSide))
+                        .font(Typography.cardLetter(shortSide: layout.shortSide))
                         .foregroundStyle(Palette.cardInk)
-                case let .picture(picture, _):
-                    VStack(spacing: 0) {
-                        IllustrationView(picture: picture)
-                            .frame(width: shortSide * pictureRatio, height: shortSide * pictureRatio)
-                        if let word = appearance.word {
-                            Text(verbatim: word)
-                                .font(Typography.cardWord(shortSide: shortSide))
-                                .foregroundStyle(Palette.cardInk)
-                        }
+                case let .picture(picture, word?):
+                    // 言葉の場所ははじめからとっておき、揃ったら見せる（言葉が現れても絵が動かない）
+                    VStack(spacing: Metrics.cardWordSpacing) {
+                        IllustrationView(picture: picture, tight: true)
+                            .frame(width: layout.pictureSideWithWord, height: layout.pictureSideWithWord)
+                        Text(verbatim: word)
+                            .font(Typography.cardWord(shortSide: layout.shortSide))
+                            .foregroundStyle(Palette.cardInk)
+                            .opacity(appearance.word == nil ? 0 : 1)
+                            .accessibilityHidden(appearance.word == nil)
                     }
+                case let .picture(picture, nil):
+                    IllustrationView(picture: picture, tight: true)
+                        .frame(width: layout.pictureSide, height: layout.pictureSide)
                 }
             }
-    }
-
-    private var pictureRatio: CGFloat {
-        appearance.word == nil ? Metrics.cardPictureRatio : Metrics.cardMatchedPictureRatio
     }
 }
 

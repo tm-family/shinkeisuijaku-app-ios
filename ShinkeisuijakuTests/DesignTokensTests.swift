@@ -92,9 +92,20 @@ struct DesignTokensTests {
         #expect(ButtonOpacity.value(isPressed: true, isEnabled: false) == Metrics.disabledOpacity)
     }
 
-    /// 丸ゴの書体が端末に入っている（同梱しないため、名前が違うとシステムの書体に置き換わってしまう）
+    /// 丸ゴの書体（Zen Maru Gothic Bold）がアプリに入っていて、名前で使える（ファイルの登録漏れや名前の違いがあると、システムの書体に置き換わってしまう）
     @Test
-    func roundedFontIsInstalled() {
-        #expect(UIFont(name: Typography.roundedFontName, size: 12) != nil)
+    func roundedFontIsBundled() throws {
+        let font = try #require(UIFont(name: Typography.roundedFontName, size: 12))
+        #expect(font.fontName == "ZenMaruGothic-Bold")
+        let registered = try #require(Bundle.main.object(forInfoDictionaryKey: "UIAppFonts") as? [String])
+        #expect(registered.contains("ZenMaruGothic-Bold.ttf"))
+    }
+
+    /// 書体のライセンス文（SIL Open Font License）もアプリに入っている（ライセンスの決まりで、書体と一緒に配る）
+    @Test
+    func roundedFontLicenseIsBundled() throws {
+        let url = try #require(Bundle.main.url(forResource: "ZenMaruGothic-OFL", withExtension: "txt"))
+        let text = try String(contentsOf: url, encoding: .utf8)
+        #expect(text.contains("SIL OPEN FONT LICENSE Version 1.1"))
     }
 }

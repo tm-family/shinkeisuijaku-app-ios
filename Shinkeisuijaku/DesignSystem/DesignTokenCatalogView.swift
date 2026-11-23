@@ -55,7 +55,7 @@ struct DesignTokenCatalogView: View {
             ("artGreen", Palette.artGreen), ("artBlue", Palette.artBlue), ("artPink", Palette.artPink),
             ("artBrown", Palette.artBrown), ("artTan", Palette.artTan), ("artWhite", Palette.artWhite),
             ("artDark", Palette.artDark), ("artGray", Palette.artGray), ("artBerry", Palette.artBerry),
-            ("artOutline", Palette.artOutline)
+            ("artRose", Palette.artRose), ("artOutline", Palette.artOutline)
         ])
         swatchSection("スタンプ", swatches: [
             ("stampSilver", Palette.stampSilver), ("stampSilverWash", Palette.stampSilverWash),

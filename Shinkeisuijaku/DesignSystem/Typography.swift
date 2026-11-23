@@ -12,7 +12,7 @@ import SwiftUI
 struct TypographyToken: Sendable {
     /// 書体
     enum Face: Sendable {
-        /// ヒラギノ丸ゴ W4。太さは付けない（Discussion #4 の Q6）
+        /// 丸ゴシック（Zen Maru Gothic Bold）。書体そのものが太字なので、太さは付けない
         case rounded
         /// システムの書体（ヒラギノ角ゴ）と太さ
         case system(Font.Weight)
@@ -36,8 +36,10 @@ struct TypographyToken: Sendable {
 
 /// アプリで使う文字。値は引き継ぎブックの「文字」と同じ（太さ 800 は `.heavy`、700 は `.bold`、400 は `.regular`）
 enum Typography {
-    /// ヒラギノ丸ゴの PostScript 名。端末に入っている書体を使い、同梱しない（Q6）
-    static let roundedFontName = "HiraMaruProN-W4"
+    /// 丸ゴシックの PostScript 名。改訂版の引き継ぎブック（Q6 の答えの変更）で、ヒラギノ丸ゴ W4 から Zen Maru Gothic Bold に変えた。
+    /// 端末に入っていないので、`Fonts/` に置いたファイル（SIL Open Font License。ライセンス文も同じ場所に置く）を `Info.plist` の `UIAppFonts` で登録して使う。
+    /// 使うのは、ホームのタイトル・ひらがなカードの文字・カードに現れる言葉・パス専用のスタンプの「あ」だけ（ほかはシステムの書体）
+    static let roundedFontName = "ZenMaruGothic-Bold"
 
     /// ホームのタイトル（32・丸ゴ・字間 0.02em）
     static let homeTitle = TypographyToken(size: 32, face: .rounded, trackingEm: 0.02, relativeTo: .largeTitle)
@@ -70,8 +72,8 @@ enum Typography {
     static let parentsSectionTitle = TypographyToken(size: 17, face: .system(.heavy), relativeTo: .headline)
 
     // カードの文字は、カードの短辺に対する割合で大きさを決める
-    /// ひらがなカードの文字（短辺の 66%・丸ゴ）
-    static let cardLetterRatio: CGFloat = 0.66
+    /// ひらがなカードの文字（短辺の 88%・丸ゴ）
+    static let cardLetterRatio: CGFloat = 0.88
     /// ペアが揃うと現れる言葉（短辺の 15%・丸ゴ）
     static let cardWordRatio: CGFloat = 0.15
     /// カードの裏の「？」（短辺の 34%・800）
@@ -121,7 +123,7 @@ private struct TypographyModifier: ViewModifier {
     private var font: Font {
         switch token.face {
         case .rounded:
-            // 丸ゴは W4 のまま。`.bold()`・`.fontWeight` を付けない（Q6）
+            // 丸ゴは Bold の 1 書体だけを入れている（ほかの太さは無い）。`.bold()`・`.fontWeight` を付けない
             .custom(Typography.roundedFontName, size: token.size, relativeTo: token.relativeTo)
         case let .system(weight):
             .system(size: token.size * scale, weight: weight)

@@ -23,7 +23,7 @@ enum ScreenshotDemo {
         case designTokenColors
         /// デザイントークンの見本（文字・寸法・動き）。App Store には出さない
         case designTokenTypes
-        /// 13 種類の絵の見本。App Store には出さない
+        /// 14 種類の絵の見本。App Store には出さない
         case illustrations
         /// カードの 4 つの状態の見本。App Store には出さない
         case cards
@@ -31,6 +31,8 @@ enum ScreenshotDemo {
         case stamps
         /// プレイ画面（ひらがな・やさしい。2 組揃えて 1 枚めくった状態）
         case play
+        /// プレイ画面（どうぶつ・むずかしいの 20 枚。3 組揃えて 1 枚めくった状態）。App Store には出さない（小さな画面で 5 段が収まるかを見る用）
+        case playHard
         /// クリアのダイアログ（どうぶつ・やさしいを全部揃えてクリアし、スタンプをもらった状態）
         case clear
         /// 保護者の確認のダイアログ（種を固定した問題）。App Store には出さない

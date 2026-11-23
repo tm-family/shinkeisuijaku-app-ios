@@ -35,6 +35,8 @@ enum StampStyle {
         case .apple: Palette.artRed
         case .strawberry: Palette.artBerry
         case .bear: Palette.artBrown
+        // ブタは通常のスタンプに無い（引き継ぎの一式の「絵が使われる場所」）。絵を足したときの書き忘れを防ぐ switch なので、顔の色にしておく
+        case .pig: Palette.artRose
         case .suika: Palette.artGreen
         case .star: Palette.artYellow
         }

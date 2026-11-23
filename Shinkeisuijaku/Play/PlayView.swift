@@ -2,7 +2,7 @@
 //  PlayView.swift
 //  Shinkeisuijaku
 //
-//  プレイ画面（引き継ぎブックの 10 ページ）。上にコース名と「あと◯ペア」と説明の 1 行、中央に 4 列のカード、下にヒントとやめる。
+//  プレイ画面（引き継ぎブックの 10 ページ）。上にコース名と「あと◯ペア」と説明の 1 行、中央にカード（基本は 4 列）、下にヒントとやめる。
 //  タイマー・めくった回数・ミスは出さない。ゲームの進み方は `GameSession` が持ち、この画面は押したことを伝えて見た目を変えるだけ。
 //
 
@@ -158,7 +158,7 @@ struct PlayView: View {
     }
 }
 
-/// 4 列のカード。行は使える高さで等分する（iPhone SE でもスクロールせずに収まる）。
+/// カードの並び。列の数は枚数と画面の大きさで選び（`CardGridLayout`。12 枚はふつう 3 列）、行は使える高さで等分する（iPhone SE でもスクロールせずに収まる）。
 /// カードが縦に長くなりすぎないよう高さに上限があるので（`CardGridLayout`）、あまった高さは上下に分けて真ん中に置く
 private struct CardGrid: View {
     let session: GameSession
@@ -234,13 +234,13 @@ struct PlayScreenshotDemoView: View {
     private let flipsNextCard: Bool
     @State private var session: GameSession
 
-    init(course: Course = .hiragana, matchedPairCount: Int? = 2, flipsNextCard: Bool = true) {
+    init(course: Course = .hiragana, difficulty: Difficulty = .easy, matchedPairCount: Int? = 2, flipsNextCard: Bool = true) {
         self.matchedPairCount = matchedPairCount
         self.flipsNextCard = flipsNextCard
         var generator = SeededRandomNumberGenerator(seed: 4)
         _session = State(initialValue: GameSession(
             course: course,
-            difficulty: .easy,
+            difficulty: difficulty,
             isBeforeFirstClear: false,
             timing: .standard,
             clock: InstantGameClock(),

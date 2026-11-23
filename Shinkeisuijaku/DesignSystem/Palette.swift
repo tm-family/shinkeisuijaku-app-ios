@@ -84,7 +84,7 @@ enum Palette {
     static let artGreen = Color(hex: 0x2EBD6B)
     /// 青。ペンギン
     static let artBlue = Color(hex: 0x2F7DF6)
-    /// ピンク。ほっぺ・耳の内側・鼻
+    /// ピンク。ほっぺ・耳の内側・鼻・ブタの鼻
     static let artPink = Color(hex: 0xFF7FA3)
     /// 茶。イヌの耳・クマ
     static let artBrown = Color(hex: 0x8D5A36)
@@ -98,6 +98,8 @@ enum Palette {
     static let artGray = Color(hex: 0x8F9BB3)
     /// ベリー色。イチゴ
     static let artBerry = Color(hex: 0xFF3D6B)
+    /// ローズ。ブタの顔
+    static let artRose = Color(hex: 0xFFB0C4)
     /// 輪郭線。図形の輪郭線（太さは `Metrics.artOutlineWidth`）
     static let artOutline = Color(hex: 0x2B3140)
     /// 画面の面（ボタンなど）の上に直接描く絵の線。ライトは輪郭線と同じ、ダークは文字の色にして暗い面でも見えるようにする

@@ -20,8 +20,12 @@ enum Metrics {
     static let contentMaxWidth: CGFloat = 600
 
     // カード
-    /// カードの列の数
+    /// カードの基本の列の数（列の数の候補が同じ大きさのときと、枚数を割り切れる候補が無いとき）
     static let cardColumns = 4
+    /// カードの列の数の候補（引き継ぎブックの「カードの並び」の 3〜5 列）。先のものほど優先する（同じ大きさなら 4 列）
+    static let cardColumnCandidates = [4, 3, 5]
+    /// 列の数を選ぶとき、カードの大きさが同じとみなす差（引き継ぎブックの `BoardView.columns(count:in:gap:)` の 0.5）
+    static let cardColumnTieTolerance: CGFloat = 0.5
     /// カードどうしのすき間（縦横とも）
     static let cardSpacing: CGFloat = 8
     /// カードの高さの、幅に対する割合の上限。行は使える高さで等分するが、これより縦に長くはしない（あまった高さは上下に分ける）。
@@ -37,10 +41,14 @@ enum Metrics {
     static let cardBackDotSpacing: CGFloat = 18
     /// カードの裏の水玉の直径（引き継ぎブックに無いので、間隔の 3 分の 1 にした）
     static let cardBackDotDiameter: CGFloat = 6
-    /// 表のカードの絵の大きさ（カードの短辺に対する割合）
-    static let cardPictureRatio: CGFloat = 0.62
-    /// ペアが揃って言葉が現れたときの絵の大きさ（カードの短辺に対する割合。下に言葉を置く分だけ小さくする）
-    static let cardMatchedPictureRatio: CGFloat = 0.5
+    /// 表のカードの絵の一辺（カードの幅に対する割合。絵はぴったりの枠で描く）
+    static let cardPictureWidthRatio: CGFloat = 0.95
+    /// 表のカードの絵の一辺の上限（カードの高さに対する割合。横に広いカードで、高さが足りないとき）
+    static let cardPictureHeightRatio: CGFloat = 0.98
+    /// 言葉つきの絵（ひらがなコースの絵のカード）で、高さから引く言葉の分（カードの短辺に対する割合）
+    static let cardWordAreaRatio: CGFloat = 0.24
+    /// 言葉つきの絵と言葉のすき間（引き継ぎブックの `CardFront` の `VStack(spacing: 2)`）
+    static let cardWordSpacing: CGFloat = 2
 
     // ホーム（引き継ぎブックに値が無いものは、iPhone SE でスクロールせずに収まる大きさにした）
     /// ホームの背景の水玉の間隔（色は `Palette.homeBackgroundDot`）
@@ -147,6 +155,8 @@ enum Metrics {
     static let artCanvasSize: CGFloat = 108
     /// 絵の輪郭線の太さ（枠が `artCanvasSize` のときの値。色は `Palette.artOutline`）
     static let artOutlineWidth: CGFloat = 2.2
+    /// カード用の「ぴったりの枠」で、描いた部分の上下左右に足す余白（絵の元の枠の座標で。引き継ぎの一式の「ゆらぎの分の余白 約 1.5」）
+    static let artCardBoxMargin: CGFloat = 1.5
 
     // おうちの方への画面（引き継ぎブックに見本も値も無いので、ほかの画面の値に合わせて決めた）
     /// まとまり（見出し・パス・方針・リンク）どうしのすき間（スタンプちょうのまとまりと同じ）

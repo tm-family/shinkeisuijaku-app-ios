@@ -17,7 +17,7 @@ struct StampStyleTests {
         let expected: [Picture: Color] = [
             .cat: Palette.artGray, .dog: Palette.artTan, .rabbit: Palette.artPink, .panda: Palette.artDark,
             .frog: Palette.artGreen, .chick: Palette.artYellow, .fox: Palette.artOrange, .penguin: Palette.artBlue,
-            .apple: Palette.artRed, .strawberry: Palette.artBerry, .bear: Palette.artBrown, .suika: Palette.artGreen,
+            .apple: Palette.artRed, .strawberry: Palette.artBerry, .bear: Palette.artBrown, .pig: Palette.artRose, .suika: Palette.artGreen,
             .star: Palette.artYellow
         ]
         for picture in Picture.allCases {

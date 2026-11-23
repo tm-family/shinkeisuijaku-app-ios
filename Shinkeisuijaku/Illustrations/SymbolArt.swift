@@ -3,7 +3,7 @@
 //  Shinkeisuijaku
 //
 //  SVG に無い 2 つの絵: ヒントのボタンの目と、ひらがなコースのシンボルの「あ」。
-//  引き継ぎブックの 6 ページの部品の見本を見て、13 種類の絵と同じ決まり（輪郭線 `artOutline`・太さ 2.2・表情の線は丸い端）で描く。
+//  引き継ぎブックの 6 ページの部品の見本を見て、14 種類の絵と同じ決まり（輪郭線 `artOutline`・太さ 2.2・表情の線は丸い端）で描く。
 //
 
 import SwiftUI
@@ -62,7 +62,7 @@ struct HintEyesView: View {
     }
 }
 
-/// ひらがなコースのシンボルの「あ」（パス専用のスタンプの中に置く）。丸ゴ W4 の文字で、太さは付けない（Q6）
+/// ひらがなコースのシンボルの「あ」（パス専用のスタンプの中に置く）。ひらがなカードと同じ丸ゴ（Zen Maru Gothic Bold）の文字で、太さは付けない
 struct HiraganaSymbolView: View {
     var body: some View {
         GeometryReader { proxy in

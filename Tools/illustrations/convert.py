@@ -29,7 +29,7 @@ SVG_NS = "{http://www.w3.org/2000/svg}"
 PICTURES = [
     ("cat", "ネコ"), ("dog", "イヌ"), ("rabbit", "ウサギ"), ("panda", "パンダ"), ("frog", "カエル"),
     ("chick", "ヒヨコ"), ("fox", "キツネ"), ("penguin", "ペンギン"), ("apple", "リンゴ"),
-    ("strawberry", "イチゴ"), ("bear", "クマ"), ("suika", "スイカ"), ("star", "ホシ"),
+    ("strawberry", "イチゴ"), ("bear", "クマ"), ("pig", "ブタ"), ("suika", "スイカ"), ("star", "ホシ"),
 ]
 
 # SVG の色と Palette の名前（引き継ぎブックの「絵の色」）
@@ -37,7 +37,7 @@ COLORS = {
     "#e53935": "artRed", "#ff8a1f": "artOrange", "#ffc400": "artYellow", "#2ebd6b": "artGreen",
     "#2f7df6": "artBlue", "#ff7fa3": "artPink", "#8d5a36": "artBrown", "#e0a96d": "artTan",
     "#ffffff": "artWhite", "#222733": "artDark", "#8f9bb3": "artGray", "#ff3d6b": "artBerry",
-    "#2b3140": "artOutline",
+    "#ffb0c4": "artRose", "#2b3140": "artOutline",
 }
 
 # 輪郭線の太さ（Metrics.artOutlineWidth と同じ値）。これと同じ太さはトークンの名前で書き出す
