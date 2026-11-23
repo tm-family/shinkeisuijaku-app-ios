@@ -29,4 +29,4 @@ The only external links are the privacy policy and the contact form on the "„Åä„
 None. The features and content are the same in all regions. The app is distributed in Japan only, as it is Japanese only.
 
 6. REGULATED INDUSTRY / THIRD-PARTY MATERIAL
-Not a regulated industry, and no third-party protected material. All illustrations (animals, fruits, a star, and the stamps) are original artwork made for this app and drawn in code. Text uses the Hiragino fonts built into iOS; no fonts are bundled.
+Not a regulated industry, and no third-party protected material. All illustrations (animals, fruits, a star, and the stamps) are original artwork made for this app and drawn in code. Text uses the system fonts and one bundled open-source font, Zen Maru Gothic Bold (SIL Open Font License 1.1; its license text is included in the app).
