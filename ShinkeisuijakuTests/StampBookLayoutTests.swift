@@ -123,5 +123,9 @@ struct StampBookLayoutTests {
         // 狭いときも下限の 72 より小さくしない
         #expect(StampBookLayout.diameter(forWidth: 200) == Metrics.stampBookMinDiameter)
         #expect(StampBookLayout.diameter(forWidth: 0) == Metrics.stampBookMinDiameter)
+        // iPad の全画面（倍率 1.5）では、すき間と直径の範囲を倍率の分だけ広げる
+        #expect(StampBookLayout.diameter(forWidth: 1000, scale: 1.5) == Metrics.stampBookMaxDiameter * 1.5)
+        #expect(StampBookLayout.diameter(forWidth: 0, scale: 1.5) == Metrics.stampBookMinDiameter * 1.5)
+        #expect(StampBookLayout.diameter(forWidth: 500, scale: 1.5) == (500 - Metrics.stampBookSpacing * 1.5 * 3) / 4)
     }
 }

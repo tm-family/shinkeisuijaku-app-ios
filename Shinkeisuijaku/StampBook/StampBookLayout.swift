@@ -96,11 +96,13 @@ struct StampBookLayout: Equatable {
         }
     }
 
-    /// スタンプの直径。使える幅に 4 列が入る大きさを、72〜80 の範囲に収める（既定: 幅から決める）
-    /// - Parameter width: 左右の余白を除いた、スタンプを並べられる幅
-    static func diameter(forWidth width: CGFloat) -> CGFloat {
+    /// スタンプの直径。使える幅に 4 列が入る大きさを、72〜80（iPad の全画面では倍率を掛けた範囲）に収める（既定: 幅から決める）
+    /// - Parameters:
+    ///   - width: 左右の余白を除いた、スタンプを並べられる幅
+    ///   - scale: iPad の全画面で大きくする倍率（`layoutScale`）。すき間と直径の範囲に掛ける
+    static func diameter(forWidth width: CGFloat, scale: CGFloat = 1) -> CGFloat {
         let columns = CGFloat(regularColumns)
-        let fitting = (width - Metrics.stampBookSpacing * (columns - 1)) / columns
-        return min(max(fitting, Metrics.stampBookMinDiameter), Metrics.stampBookMaxDiameter)
+        let fitting = (width - Metrics.stampBookSpacing * scale * (columns - 1)) / columns
+        return min(max(fitting, Metrics.stampBookMinDiameter * scale), Metrics.stampBookMaxDiameter * scale)
     }
 }

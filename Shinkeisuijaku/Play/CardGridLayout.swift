@@ -22,11 +22,13 @@ struct CardGridLayout: Equatable {
     /// - Parameters:
     ///   - cardCount: カードの枚数
     ///   - available: カードを並べられる大きさ（左右の余白・上と下の表示を除いたもの）
-    init(cardCount: Int, available: CGSize) {
-        let columns = Self.columns(cardCount: cardCount, available: available)
+    ///   - scale: iPad の全画面で大きくする倍率（`layoutScale`）。カードどうしのすき間に掛ける
+    init(cardCount: Int, available: CGSize, scale: CGFloat = 1) {
+        let spacing = Metrics.cardSpacing * scale
+        let columns = Self.columns(cardCount: cardCount, available: available, spacing: spacing)
         let rows = Self.rows(cardCount: cardCount, columns: columns)
-        let width = Self.cardWidth(columns: columns, available: available)
-        let evenHeight = Self.evenHeight(rows: rows, available: available)
+        let width = Self.cardWidth(columns: columns, available: available, spacing: spacing)
+        let evenHeight = Self.evenHeight(rows: rows, available: available, spacing: spacing)
         self.columns = columns
         self.rows = rows
         cardSize = CGSize(width: width, height: min(evenHeight, width * Metrics.cardMaxAspectRatio))
@@ -35,11 +37,14 @@ struct CardGridLayout: Equatable {
     /// 列の数を選ぶ（引き継ぎブックの `BoardView.columns(count:in:gap:)`）。
     /// 候補（`Metrics.cardColumnCandidates`）のうち枚数を割り切れるものから、カードの正方形の部分（幅と、高さで等分した高さの短い方）が
     /// いちばん大きくなるものを選ぶ。大きさの差が `Metrics.cardColumnTieTolerance` までなら先の候補を残す。割り切れる候補が無ければ基本の列の数
-    static func columns(cardCount: Int, available: CGSize) -> Int {
+    static func columns(cardCount: Int, available: CGSize, spacing: CGFloat = Metrics.cardSpacing) -> Int {
         var best = Metrics.cardColumns
         var bestSide = -CGFloat.infinity
         for columns in Metrics.cardColumnCandidates where cardCount > 0 && cardCount.isMultiple(of: columns) {
-            let side = min(cardWidth(columns: columns, available: available), evenHeight(rows: cardCount / columns, available: available))
+            let side = min(
+                cardWidth(columns: columns, available: available, spacing: spacing),
+                evenHeight(rows: cardCount / columns, available: available, spacing: spacing)
+            )
             if side > bestSide + Metrics.cardColumnTieTolerance {
                 best = columns
                 bestSide = side
@@ -54,12 +59,12 @@ struct CardGridLayout: Equatable {
     }
 
     /// 列の数で幅を等分したカードの幅。文字を大きくして使える大きさが減っても、負の大きさにしない
-    private static func cardWidth(columns: Int, available: CGSize) -> CGFloat {
-        max((available.width - Metrics.cardSpacing * CGFloat(columns - 1)) / CGFloat(columns), 0)
+    private static func cardWidth(columns: Int, available: CGSize, spacing: CGFloat) -> CGFloat {
+        max((available.width - spacing * CGFloat(columns - 1)) / CGFloat(columns), 0)
     }
 
     /// 行の数で高さを等分したカードの高さ。負の大きさにしない
-    private static func evenHeight(rows: Int, available: CGSize) -> CGFloat {
-        max((available.height - Metrics.cardSpacing * CGFloat(rows - 1)) / CGFloat(rows), 0)
+    private static func evenHeight(rows: Int, available: CGSize, spacing: CGFloat) -> CGFloat {
+        max((available.height - spacing * CGFloat(rows - 1)) / CGFloat(rows), 0)
     }
 }
