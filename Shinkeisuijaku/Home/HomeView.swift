@@ -22,6 +22,8 @@ struct HomeView: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
@@ -49,18 +51,22 @@ struct HomeView: View {
     private var homeBackground: some View {
         ZStack {
             Palette.background
-            DotPattern(spacing: Metrics.homeDotSpacing, diameter: Metrics.homeDotDiameter, color: Palette.homeBackgroundDot)
+            DotPattern(
+                spacing: Metrics.homeDotSpacing * layoutScale,
+                diameter: Metrics.homeDotDiameter * layoutScale,
+                color: Palette.homeBackgroundDot
+            )
         }
     }
 
     /// ホームの中身（上から順に並べる）
     private var content: some View {
-        VStack(spacing: Metrics.homeSectionSpacing) {
+        VStack(spacing: Metrics.homeSectionSpacing * layoutScale) {
             HStack {
                 Spacer()
                 parentsButton
             }
-            VStack(spacing: Metrics.cardSpacing) {
+            VStack(spacing: Metrics.cardSpacing * layoutScale) {
                 HomeArchView()
                 HomeTitleView()
                 Text("おなじ えを みつけて あそぼう")
@@ -72,7 +78,7 @@ struct HomeView: View {
             Button(action: onOpenStampBook) {
                 Text("スタンプちょう")
                     .appFont(Typography.button)
-                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
             }
             .buttonStyle(SurfaceButtonStyle())
             .accessibilityIdentifier("home.stampBook")
@@ -81,8 +87,8 @@ struct HomeView: View {
                 .appFont(Typography.note)
                 .foregroundStyle(Palette.muted)
         }
-        .padding(.horizontal, Metrics.screenHorizontalPadding)
-        .padding(.vertical, Metrics.cardSpacing)
+        .padding(.horizontal, Metrics.screenHorizontalPadding * layoutScale)
+        .padding(.vertical, Metrics.cardSpacing * layoutScale)
     }
 
     /// 上の右の「おうちの方へ」（丸いボタン・高さ 44 以上）
@@ -94,15 +100,15 @@ struct HomeView: View {
 
     /// 「ほかの あそびかた」の どうぶつ・ひらがな（押すとコース選択）
     private var otherCourses: some View {
-        VStack(spacing: Metrics.cardSpacing) {
+        VStack(spacing: Metrics.cardSpacing * layoutScale) {
             Text("ほかの あそびかた")
                 .appFont(Typography.noteStrong)
                 .foregroundStyle(Palette.muted)
                 .accessibilityAddTraits(.isHeader)
             // 文字を大きくしたとき（アクセシビリティの大きさ）は、コース名が途中で折り返さないよう縦に積む
             let layout = TextSizeLayout.stacksVertically(dynamicTypeSize)
-                ? AnyLayout(VStackLayout(spacing: Metrics.cardSpacing))
-                : AnyLayout(HStackLayout(spacing: Metrics.cardSpacing))
+                ? AnyLayout(VStackLayout(spacing: Metrics.cardSpacing * layoutScale))
+                : AnyLayout(HStackLayout(spacing: Metrics.cardSpacing * layoutScale))
             layout {
                 ForEach(Course.allCases, id: \.self) { course in
                     Button {
@@ -110,7 +116,7 @@ struct HomeView: View {
                     } label: {
                         Text(course.name)
                             .appFont(Typography.button)
-                            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
                     }
                     .buttonStyle(SurfaceButtonStyle())
                     .accessibilityIdentifier("home.course.\(course.rawValue)")
@@ -125,13 +131,15 @@ struct HomeArchView: View {
     /// 左から並べる絵
     static let pictures: [Picture] = [.cat, .panda, .fox, .frog]
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
             ForEach(Array(Self.pictures.enumerated()), id: \.element) { index, picture in
                 let isInner = index != 0 && index != Self.pictures.count - 1
                 IllustrationView(picture: picture)
-                    .frame(width: Metrics.homeArchPictureSize, height: Metrics.homeArchPictureSize)
-                    .padding(.bottom, isInner ? Metrics.homeArchRise : 0)
+                    .frame(width: Metrics.homeArchPictureSize * layoutScale, height: Metrics.homeArchPictureSize * layoutScale)
+                    .padding(.bottom, isInner ? Metrics.homeArchRise * layoutScale : 0)
             }
         }
         .accessibilityHidden(true)
@@ -168,10 +176,12 @@ struct PlayButton: View {
     let choice: GameChoice
     let action: () -> Void
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         Button(action: action) {
             VStack(spacing: 0) {
-                HStack(spacing: Metrics.cardSpacing) {
+                HStack(spacing: Metrics.cardSpacing * layoutScale) {
                     Image(systemName: "play.fill")
                         .accessibilityHidden(true)
                     Text("あそぶ")
@@ -181,7 +191,7 @@ struct PlayButton: View {
                     .appFont(Typography.noteStrong)
             }
             .foregroundStyle(Palette.accentText)
-            .frame(maxWidth: .infinity, minHeight: Metrics.playButtonHeight)
+            .frame(maxWidth: .infinity, minHeight: Metrics.playButtonHeight * layoutScale)
         }
         .buttonStyle(PlayButtonStyle())
         // 「・」を読ませず、「あそぶ ひらがな やさしい」と始めるゲームまで 1 つに読む
@@ -198,16 +208,27 @@ struct PlayButton: View {
 /// 大きな「あそぶ」の見た目。押しているあいだは影の分だけ沈める
 private struct PlayButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        let offset = configuration.isPressed ? Metrics.playButtonShadowOffsetY : 0
-        configuration.label
-            .background(Palette.accent, in: RoundedRectangle(cornerRadius: Metrics.playButtonCornerRadius))
-            .offset(y: offset)
-            .background {
-                RoundedRectangle(cornerRadius: Metrics.playButtonCornerRadius)
-                    .fill(Palette.playButtonShadow)
-                    .offset(y: Metrics.playButtonShadowOffsetY)
-            }
-            .padding(.bottom, Metrics.playButtonShadowOffsetY)
+        PlayButtonLook(configuration: configuration)
+    }
+
+    /// 倍率（環境値）を読むため、見た目は View にする
+    private struct PlayButtonLook: View {
+        let configuration: Configuration
+
+        @Environment(\.layoutScale) private var layoutScale
+
+        var body: some View {
+            let offset = configuration.isPressed ? Metrics.playButtonShadowOffsetY * layoutScale : 0
+            configuration.label
+                .background(Palette.accent, in: RoundedRectangle(cornerRadius: Metrics.playButtonCornerRadius * layoutScale))
+                .offset(y: offset)
+                .background {
+                    RoundedRectangle(cornerRadius: Metrics.playButtonCornerRadius * layoutScale)
+                        .fill(Palette.playButtonShadow)
+                        .offset(y: Metrics.playButtonShadowOffsetY * layoutScale)
+                }
+                .padding(.bottom, Metrics.playButtonShadowOffsetY * layoutScale)
+        }
     }
 }
 

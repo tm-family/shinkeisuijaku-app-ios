@@ -101,6 +101,18 @@ struct CardGridLayoutTests {
         }
     }
 
+    /// iPad の全画面（倍率 1.57）では、すき間も倍率の分だけ広げて並べる（iPad Pro 13 インチの縦で、6 ペアは 3 列 × 4 段）
+    @Test
+    func scaledSpacingOnIPad() {
+        let scale: CGFloat = 1376.0 / 874
+        let area = CGSize(width: 911, height: 1090)
+        let layout = CardGridLayout(cardCount: 12, available: area, scale: scale)
+        let spacing = Metrics.cardSpacing * scale
+        #expect(layout.columns == 3)
+        #expect(abs(layout.cardSize.width - (911 - spacing * 2) / 3) < 0.0001)
+        #expect(abs(layout.cardSize.height - (1090 - spacing * 3) / 4) < 0.0001)
+    }
+
     /// 文字を大きくして使える大きさが無くなっても、負の大きさにしない
     @Test
     func zeroAreaGivesZeroSize() {

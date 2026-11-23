@@ -35,6 +35,15 @@ struct StampStyleTests {
         #expect(StampStyle.rimColors(of: .gold).wash == Palette.stampGoldWash)
     }
 
+    /// 点線は、太さと線の長さ・間に倍率を掛ける（iPad の全画面で、スタンプと同じだけ大きくする）
+    @Test
+    func dashedStrokeFollowsTheScale() {
+        let stroke = StampStyle.dashedStroke(lineWidth: Metrics.stampDashedLineWidth, scale: 1.5)
+        #expect(stroke.lineWidth == Metrics.stampDashedLineWidth * 1.5)
+        #expect(stroke.dash == Metrics.stampDash.map { $0 * 1.5 })
+        #expect(StampStyle.dashedStroke(lineWidth: Metrics.stampDashedLineWidth, scale: 1).dash == Metrics.stampDash)
+    }
+
     /// 鍵の形は与えた枠の中に収まる
     @Test
     func lockShapeFitsItsRect() {

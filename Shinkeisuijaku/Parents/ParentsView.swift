@@ -27,6 +27,8 @@ struct ParentsView: View {
         self.onHome = onHome
     }
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         // 画面に入らないとき（iPhone SE・文字を大きくしたとき）は、スクロールで全部見られる
         ScrollView {
@@ -62,7 +64,7 @@ struct ParentsView: View {
 
     /// 見出し・パス・方針・リンク（上から順に並べる）
     private var content: some View {
-        VStack(spacing: Metrics.parentsSectionSpacing) {
+        VStack(spacing: Metrics.parentsSectionSpacing * layoutScale) {
             Text("おうちの方へ")
                 .appFont(Typography.dialogTitle)
                 .foregroundStyle(Palette.text)
@@ -71,8 +73,8 @@ struct ParentsView: View {
             policySection
             linksSection
         }
-        .padding(.horizontal, Metrics.screenHorizontalPadding)
-        .padding(.vertical, Metrics.cardSpacing)
+        .padding(.horizontal, Metrics.screenHorizontalPadding * layoutScale)
+        .padding(.vertical, Metrics.cardSpacing * layoutScale)
     }
 
     // MARK: - パス
@@ -114,7 +116,7 @@ struct ParentsView: View {
                 } label: {
                     actionLabel("購入を復元", isRunning: model.pendingAction == .restore)
                         .appFont(Typography.button)
-                        .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                        .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
                 }
                 .buttonStyle(SurfaceButtonStyle())
                 .disabled(!status.canRestore)
@@ -128,11 +130,11 @@ struct ParentsView: View {
 
     /// 価格（読めるまでは読み込み中、読めなかったらその旨の表示。値段は StoreKit の表示をそのまま出す）
     private func priceRow(_ status: ParentsPassStatus) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing) {
+        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing * layoutScale) {
             Text("価格")
                 .appFont(Typography.body)
                 .foregroundStyle(Palette.muted)
-            Spacer(minLength: Metrics.cardSpacing)
+            Spacer(minLength: Metrics.cardSpacing * layoutScale)
             Text(verbatim: status.priceText)
                 .appFont(status.displayPrice == nil ? Typography.body : Typography.pairCountNumber)
                 .foregroundStyle(status.displayPrice == nil ? Palette.muted : Palette.accent)
@@ -144,7 +146,7 @@ struct ParentsView: View {
 
     /// ボタンの文字。処理中は文字の左に回る印を出す
     private func actionLabel(_ title: LocalizedStringKey, isRunning: Bool) -> some View {
-        HStack(spacing: Metrics.cardSpacing) {
+        HStack(spacing: Metrics.cardSpacing * layoutScale) {
             if isRunning {
                 ProgressView()
                     .accessibilityHidden(true)
@@ -155,7 +157,7 @@ struct ParentsView: View {
 
     /// 購入済みのとき、「購入する」の代わりに出す
     private var purchasedNotice: some View {
-        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing) {
+        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing * layoutScale) {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(Palette.accent)
                 .accessibilityHidden(true)
@@ -164,16 +166,16 @@ struct ParentsView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .appFont(Typography.button)
-        .padding(.horizontal, Metrics.parentsSectionPadding)
-        .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
-        .background(Palette.background, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius))
+        .padding(.horizontal, Metrics.parentsSectionPadding * layoutScale)
+        .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
+        .background(Palette.background, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius * layoutScale))
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("parents.purchased")
     }
 
     /// 購入・復元の結果の文。うまくいかなかったときは印を変える（文でも分かるので、色だけに頼らない）
     private func messageView(_ message: ParentsMessage) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing) {
+        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing * layoutScale) {
             Image(systemName: message.isProblem ? "exclamationmark.circle" : "checkmark.circle")
                 .foregroundStyle(message.isProblem ? Palette.text : Palette.accent)
                 .accessibilityHidden(true)
@@ -214,13 +216,13 @@ struct ParentsView: View {
         Button {
             openURL(url)
         } label: {
-            HStack(spacing: Metrics.cardSpacing) {
+            HStack(spacing: Metrics.cardSpacing * layoutScale) {
                 Text(title)
                 Image(systemName: "arrow.up.forward.square")
                     .accessibilityHidden(true)
             }
             .appFont(Typography.button)
-            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         .accessibilityHint(Text("ブラウザで開きます"))
@@ -233,14 +235,14 @@ struct ParentsView: View {
         Button(action: onHome) {
             Text("ホームにもどる")
                 .appFont(Typography.button)
-                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         // 購入・復元の途中で戻ると、結果の文を保護者に伝えられないので、終わるまで押せなくする
         .disabled(model.status.isBusy)
         .accessibilityIdentifier("parents.home")
-        .padding(.horizontal, Metrics.screenHorizontalPadding)
-        .padding(.vertical, Metrics.cardSpacing)
+        .padding(.horizontal, Metrics.screenHorizontalPadding * layoutScale)
+        .padding(.vertical, Metrics.cardSpacing * layoutScale)
         // ボタンは中身と同じ幅にし、下の帯の地は画面の幅いっぱいに敷く
         .contentWidthLimited()
         .background(Palette.background)
@@ -252,8 +254,10 @@ private struct ParentsSection<Content: View>: View {
     let title: LocalizedStringKey
     @ViewBuilder let content: () -> Content
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        VStack(alignment: .leading, spacing: Metrics.cardSpacing) {
+        VStack(alignment: .leading, spacing: Metrics.cardSpacing * layoutScale) {
             Text(title)
                 .appFont(Typography.parentsSectionTitle)
                 .foregroundStyle(Palette.text)
@@ -261,11 +265,11 @@ private struct ParentsSection<Content: View>: View {
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Metrics.parentsSectionPadding)
-        .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.parentsSectionCornerRadius))
+        .padding(Metrics.parentsSectionPadding * layoutScale)
+        .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.parentsSectionCornerRadius * layoutScale))
         .overlay {
-            RoundedRectangle(cornerRadius: Metrics.parentsSectionCornerRadius)
-                .stroke(Palette.border, lineWidth: Metrics.borderWidth)
+            RoundedRectangle(cornerRadius: Metrics.parentsSectionCornerRadius * layoutScale)
+                .stroke(Palette.border, lineWidth: Metrics.borderWidth * layoutScale)
         }
     }
 }
@@ -278,8 +282,10 @@ private struct ParentsBullet: View {
         self.text = text
     }
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: Metrics.parentsBulletSpacing) {
+        HStack(alignment: .firstTextBaseline, spacing: Metrics.parentsBulletSpacing * layoutScale) {
             Text(verbatim: "・")
                 .accessibilityHidden(true)
             Text(text)
