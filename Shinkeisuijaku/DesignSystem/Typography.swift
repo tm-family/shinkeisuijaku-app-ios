@@ -108,6 +108,8 @@ private struct TypographyModifier: ViewModifier {
     let token: TypographyToken
     /// Dynamic Type の倍率。システムの書体の大きさと字間に掛ける
     @ScaledMetric private var scale: CGFloat
+    /// iPad の全画面で大きくする倍率（`LayoutScale`。iPhone は 1）。Dynamic Type の倍率と一緒に掛ける
+    @Environment(\.layoutScale) private var layoutScale
 
     init(token: TypographyToken) {
         self.token = token
@@ -117,22 +119,22 @@ private struct TypographyModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(font)
-            .tracking(token.size * scale * token.trackingEm)
+            .tracking(token.size * layoutScale * scale * token.trackingEm)
     }
 
     private var font: Font {
         switch token.face {
         case .rounded:
             // 丸ゴは Bold の 1 書体だけを入れている（ほかの太さは無い）。`.bold()`・`.fontWeight` を付けない
-            .custom(Typography.roundedFontName, size: token.size, relativeTo: token.relativeTo)
+            .custom(Typography.roundedFontName, size: token.size * layoutScale, relativeTo: token.relativeTo)
         case let .system(weight):
-            .system(size: token.size * scale, weight: weight)
+            .system(size: token.size * layoutScale * scale, weight: weight)
         }
     }
 }
 
 extension View {
-    /// 文字のトークン（大きさ・書体・太さ・字間）を当てる。Dynamic Type に追従する
+    /// 文字のトークン（大きさ・書体・太さ・字間）を当てる。Dynamic Type に追従し、iPad の全画面では倍率（`layoutScale`）の分だけ大きくする
     func appFont(_ token: TypographyToken) -> some View {
         modifier(TypographyModifier(token: token))
     }

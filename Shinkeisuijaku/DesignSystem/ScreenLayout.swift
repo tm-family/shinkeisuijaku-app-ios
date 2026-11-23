@@ -2,7 +2,7 @@
 //  ScreenLayout.swift
 //  Shinkeisuijaku
 //
-//  画面の配置の共通の決まり。iPad で中身が横に広がりすぎないよう、中身の幅に上限を設けて中央に置く。
+//  画面の配置の共通の決まり。iPad で中身が横に広がりすぎないよう、中身の幅に上限（iPad の全画面では倍率の分だけ広げる）を設けて中央に置く。
 //  スクロールする画面（ホーム・スタンプちょう・おうちの方へ）では、上の安全領域に背景を敷いて、中身がステータスバーに重ならないようにする。
 //
 
@@ -38,10 +38,20 @@ extension View {
         }
     }
 
-    /// 中身（左右の余白を含む列）の幅を `Metrics.contentMaxWidth` までにして、横の真ん中に置く。
+    /// 中身（左右の余白を含む列）の幅を `Metrics.contentMaxWidth` に倍率（`layoutScale`）を掛けた幅までにして、横の真ん中に置く。
     /// 外の枠は横いっぱいに広げるので、この後に付けた背景は画面の幅いっぱいに敷かれる
     func contentWidthLimited() -> some View {
-        frame(maxWidth: Metrics.contentMaxWidth)
+        modifier(ContentWidthLimit())
+    }
+}
+
+/// 中身の幅の上限。iPad の全画面では、文字やボタンと同じ倍率で広げて、画面の幅を使う
+private struct ContentWidthLimit: ViewModifier {
+    @Environment(\.layoutScale) private var layoutScale
+
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: Metrics.contentMaxWidth * layoutScale)
             .frame(maxWidth: .infinity)
     }
 }

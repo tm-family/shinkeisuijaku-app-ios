@@ -4,6 +4,8 @@
 //
 //  引き継ぎブックの「寸法と角丸」を写した寸法のトークン（単位は pt）。
 //  画面は余白・角丸・高さ・影の数値を直接書かず、ここの値だけを使う。
+//  値は iPhone の画面（倍率 1）のもの。画面では、長さのトークンに iPad の全画面で大きくする倍率（環境値 `layoutScale`。`LayoutScale`）を掛けて使う。
+//  比率（〜Ratio）・透明度・角度・列の数・絵の枠の中の座標（artCanvasSize・artOutlineWidth・artCardBoxMargin）には掛けない。
 //
 
 import CoreGraphics
@@ -15,8 +17,9 @@ enum Metrics {
     static let gameHorizontalPadding: CGFloat = 10
     /// ホーム・スタンプちょうの左右の余白
     static let screenHorizontalPadding: CGFloat = 16
-    /// 画面の中身（左右の余白を含む列）の幅の上限。これより広い画面（iPad）では、中身をこの幅にして中央に置く。
-    /// 引き継ぎブックに値が無いので、iPhone の一番広い画面（440）より広く、iPad の縦（13 インチで 1032）で横に広がりすぎない幅にした
+    /// 画面の中身（左右の余白を含む列）の幅の上限（倍率 1 のときの値。iPad の全画面では `layoutScale` を掛ける）。これより広い画面では、中身をこの幅にして中央に置く。
+    /// 引き継ぎブックに値が無いので、iPhone の一番広い画面（440）より広い幅にした。iPad の全画面では倍率を掛けるので、
+    /// iPad mini・11 インチでは画面の幅いっぱい、13 インチでは画面の幅のおよそ 9 割（600 × 1.57 ≒ 944）になる
     static let contentMaxWidth: CGFloat = 600
 
     // カード
