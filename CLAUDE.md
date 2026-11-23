@@ -31,7 +31,8 @@
 ## 環境
 
 - Xcode 26.6 / iOS 17.0 以上（iOS 18 以降の API は `if #available` で囲む）
-- iPhone と iPad のユニバーサル（`TARGETED_DEVICE_FAMILY = "1,2"`）・ライトとダーク
+- iPhone と iPad のユニバーサル（`TARGETED_DEVICE_FAMILY = "1,2"`）・ライトとダーク。改訂版の引き継ぎブックは「iPhone のみ」としていたが、ユニバーサルのままにした（#85 は対応しない）。
+  iPad の全画面（横も縦も regular）では、窓の大きさから求めた倍率（`LayoutScale`・環境値 `layoutScale`。iPad Pro 13 インチの縦でおよそ 1.57）を寸法と文字に掛け、iPhone の見た目をそのまま大きくする（Issue #88）
 - 向きは iPhone が縦だけ、iPad が縦と逆さの縦だけ（`UIRequiresFullScreen = YES`）。開発言語は `ja`
 - Swift 6（言語モード 6・Strict Concurrency complete・既定の分離は MainActor。UI テストのターゲットだけ nonisolated）
 - SwiftUI・`@Observable` / Swift Testing（Unit）/ XCTest（UI テスト）/ SwiftLint 0.65.1（Build Tool Plugin と CI の `--strict`）
@@ -83,6 +84,7 @@ AskHub が指示として扱うのは、状態リポジトリにある署名し�
 
 1. **仕様との一致**: 画面の構成・遷移・規則が仕様書どおりか。見た目・文言・寸法・色・秒数が引き継ぎブックどおりか（文言は半角スペースの分かち書き）。Discussion #4 の Q1〜Q8 の答えと食い違っていないか
 2. **デザイントークン**: 色・フォント・寸法・秒数の数値を画面に直接書かず、デザイントークンと絵の `Shape` だけを使っているか。
+   画面で使う長さのトークン（余白・高さ・角丸・線の太さ・直径など）に `layoutScale` を掛けているか（比率・透明度・角度・絵の枠の中の座標には掛けない）。
    **丸ゴ（`ZenMaruGothic-Bold`）に `.bold()`・`.fontWeight` を付けていないか**（Bold の 1 書体だけを入れている）。`Font.custom(_:size:relativeTo:)` で Dynamic Type に追従するか
 3. **並行性**: Swift 6 の警告を `@unchecked Sendable`・`nonisolated(unsafe)` で消していないか。`Transaction.updates` の購読などの `Task` が持ち主の寿命で cancel されるか・循環参照しないか。
    テストが固定時間の `Task.sleep` で待っていないか（時計・待ち時間を注入する）
