@@ -44,6 +44,8 @@ struct Shinkeisuijaku: App {
             StampCatalogView()
         case .play:
             PlayScreenshotDemoView()
+        case .playHard:
+            PlayScreenshotDemoView(course: .animals, difficulty: .hard, matchedPairCount: 3)
         case .clear:
             ClearScreenshotDemoView()
         case .parentalGate:

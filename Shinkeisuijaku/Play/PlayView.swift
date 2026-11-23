@@ -234,13 +234,13 @@ struct PlayScreenshotDemoView: View {
     private let flipsNextCard: Bool
     @State private var session: GameSession
 
-    init(course: Course = .hiragana, matchedPairCount: Int? = 2, flipsNextCard: Bool = true) {
+    init(course: Course = .hiragana, difficulty: Difficulty = .easy, matchedPairCount: Int? = 2, flipsNextCard: Bool = true) {
         self.matchedPairCount = matchedPairCount
         self.flipsNextCard = flipsNextCard
         var generator = SeededRandomNumberGenerator(seed: 4)
         _session = State(initialValue: GameSession(
             course: course,
-            difficulty: .easy,
+            difficulty: difficulty,
             isBeforeFirstClear: false,
             timing: .standard,
             clock: InstantGameClock(),
