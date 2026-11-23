@@ -20,6 +20,8 @@ struct Shinkeisuijaku: App {
     var body: some Scene {
         WindowGroup {
             rootView
+                // iPad の全画面では、窓の大きさに合わせて寸法と文字を大きくする（iPhone は倍率 1 のまま）
+                .providesLayoutScale()
         }
     }
 
