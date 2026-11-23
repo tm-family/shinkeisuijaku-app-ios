@@ -2,14 +2,14 @@
 //  Illustration.swift
 //  Shinkeisuijaku
 //
-//  13 種類の絵を描く。形は Discussion #4 の Q1 の添付の SVG を `Tools/illustrations/convert.py` で
+//  14 種類の絵を描く。形は Discussion #4 の Q1 の添付の SVG（ブタは改訂版の引き継ぎの一式で足したもの）を `Tools/illustrations/convert.py` で
 //  `Generated/` の Path に変換したもの（手で写さない）。ベクターなので、どの大きさでも崩れない。
 //  引き継ぎブックの「軽いゆらぎ」は入れない。
 //
 
 import SwiftUI
 
-/// 絵の部品 1 つ（SVG の path・circle・ellipse 1 つ分）。座標は絵の枠（13 種類の絵は 108×108、ヒントの目は 108×54）の中の値
+/// 絵の部品 1 つ（SVG の path・circle・ellipse 1 つ分）。座標は絵の枠（14 種類の絵は 108×108、ヒントの目は 108×54）の中の値
 struct IllustrationPart {
     let path: Path
     /// 塗りの色。塗らない線だけの部品は nil
@@ -39,6 +39,7 @@ enum IllustrationArt {
         case .apple: apple
         case .strawberry: strawberry
         case .bear: bear
+        case .pig: pig
         case .suika: suika
         case .star: star
         }
@@ -101,7 +102,7 @@ extension Path {
     }
 }
 
-/// 絵の見本の画面。上にヒントの目と「あ」、下に 13 種類の絵。撮影モードで開き、添付の画像・引き継ぎブックと見比べるために使う
+/// 絵の見本の画面。上にヒントの目と「あ」、下に 14 種類の絵。撮影モードで開き、添付の画像・引き継ぎブックと見比べるために使う
 struct IllustrationCatalogView: View {
     /// 見本の列の数（添付の画像と同じ 3 列）
     private let columns = 3

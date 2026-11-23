@@ -14,10 +14,10 @@ struct IllustrationTests {
     /// SVG の各図の部品の数（path・circle・ellipse の数）。書き出しで部品が抜けたら気づけるようにする
     private let expectedPartCounts: [Picture: Int] = [
         .cat: 15, .dog: 11, .rabbit: 13, .panda: 10, .frog: 12, .chick: 7, .fox: 9,
-        .penguin: 11, .apple: 4, .strawberry: 10, .bear: 9, .suika: 6, .star: 4
+        .penguin: 11, .apple: 4, .strawberry: 10, .bear: 9, .pig: 12, .suika: 6, .star: 4
     ]
 
-    /// 13 種類すべてに部品があり、数が SVG と同じ
+    /// 14 種類すべてに部品があり、数が SVG と同じ
     @Test
     func everyPictureHasAllParts() {
         for picture in Picture.allCases {

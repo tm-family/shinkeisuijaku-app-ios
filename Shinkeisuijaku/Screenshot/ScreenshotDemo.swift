@@ -23,7 +23,7 @@ enum ScreenshotDemo {
         case designTokenColors
         /// デザイントークンの見本（文字・寸法・動き）。App Store には出さない
         case designTokenTypes
-        /// 13 種類の絵の見本。App Store には出さない
+        /// 14 種類の絵の見本。App Store には出さない
         case illustrations
         /// カードの 4 つの状態の見本。App Store には出さない
         case cards

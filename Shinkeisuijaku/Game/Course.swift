@@ -20,6 +20,7 @@ enum Picture: String, CaseIterable, Codable, Sendable {
     case apple
     case strawberry
     case bear
+    case pig
     case suika
     case star
 
@@ -37,6 +38,7 @@ enum Picture: String, CaseIterable, Codable, Sendable {
         case .apple: String(localized: "リンゴ")
         case .strawberry: String(localized: "イチゴ")
         case .bear: String(localized: "クマ")
+        case .pig: String(localized: "ブタ")
         case .suika: String(localized: "スイカ")
         case .star: String(localized: "ホシ")
         }
