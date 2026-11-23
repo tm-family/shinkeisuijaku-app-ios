@@ -15,7 +15,8 @@
     "このアプリ: 子ども向けカテゴリ（kidsAgeBand FIVE_AND_UNDER。仕様書の「5 歳以下を中心に想定」）。プライマリは GAMES（サブカテゴリは家族向けとカード。神経衰弱はカードのゲーム）、セカンダリは EDUCATION（ひらがなと絵を覚える）。",
     "  年齢制限: 広告・ユーザーが作るコンテンツ・チャット・SNS・ギャンブル・ルートボックスはなし。外部のサイトはプライバシーポリシーとお問い合わせの 2 つだけで、保護者の確認のあとに Safari で開く（アプリの中のブラウザは無い）ので unrestrictedWebAccess は false。",
     "  parentalControls は保護者が子どもの使い方を制限する機能があるかの質問で、購入の前の保護者の確認（親ゲート）はそれにあたらないので false。アプリ内課金（買い切りのパス）は年齢制限の質問に無く、App Store Connect のアプリ内課金に登録する。",
-    "  本体は無料（パスはアプリ内課金）。日本語だけのアプリなので配信は日本だけにし、新しい国と地域にも自動で配信しない。"
+    "  本体は無料（パスはアプリ内課金）。日本語だけのアプリなので配信は日本だけにし、新しい国と地域にも自動で配信しない。",
+    "  コンテンツの権利: 書体 Zen Maru Gothic Bold（SIL Open Font License 1.1。アプリにライセンス文も入れている）を同梱しているので、USES_THIRD_PARTY_CONTENT（使っていて、必要な権利を持っている）にする。書体は第三者のコンテンツに含めない扱いも多いが、慎重な方にした。絵はすべてこのアプリのために描いたもの（審査のメモの 6 項目めと同じ）。"
   ],
   "primaryCategory": "GAMES",
   "primarySubcategories": [
@@ -23,7 +24,7 @@
     "GAMES_CARD"
   ],
   "secondaryCategory": "EDUCATION",
-  "contentRightsDeclaration": "DOES_NOT_USE_THIRD_PARTY_CONTENT",
+  "contentRightsDeclaration": "USES_THIRD_PARTY_CONTENT",
   "ageRating": {
     "alcoholTobaccoOrDrugUseOrReferences": "NONE",
     "contests": "NONE",
