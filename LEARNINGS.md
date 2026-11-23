@@ -14,4 +14,8 @@
 
 - Xcode 26.6 / iOS 26.5 の Simulator で、Unit テスト（Swift Testing・アプリがホスト）から `SKTestSession(contentsOf:)` と `SKTestSession(configurationFileNamed:)` のどちらで `Configs/Shinkeisuijaku.storekit` を開いても、`storefront` が空のまま `Product.products(for:)` が 0 件を返した（ファイルは読めている。原因は特定できていない）。StoreKit の判定は `PassStoreBackend` の擬似の実装で Unit テストし、StoreKit そのものは Xcode の Run（スキームの StoreKit Configuration）と実機で確かめる（2026-10-28）
 
+## レビュー
+
+- 2026-11-23 の時点で、このリポジトリの PR には CodeRabbit のレビューが 1 件も付いていない（マージ済みの直近 40 件で、コメントもレビューも無い。`.coderabbit.yaml` はあるが、アプリが動いていない）。CodeRabbit のレビューを待たずに、CI とセルフレビューで進める。動くようになったら、この項目を消す（2026-11-23）
+
 ## App Store の掲載
