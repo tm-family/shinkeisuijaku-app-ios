@@ -12,8 +12,8 @@
     "              deriveFrom を書いた表示サイズは撮らずに、その表示サイズを縮めて作る（ubuntu で動くので macOS の枠を使わない）。",
     "              6.3 inch（1206x2622）は 6.9 inch（1320x2868）と縦横比がほぼ同じなので縮めて作る。",
     "App Store Connect で必須なのは iPhone 6.1 / 6.3 inch（APP_IPHONE_61）と iPhone Duo（APP_IPHONE_DUO）。",
-    "iPad に対応するアプリは iPad 13 inch も必須。大型ディスプレイ（6.5 / 6.7 / 6.9 inch、APP_IPHONE_67）は任意だが、",
-    "6.3 inch の元になるので必ず撮る（反映するかは任意。display_types で外せる）。"
+    "大型ディスプレイ（6.5 / 6.7 / 6.9 inch、APP_IPHONE_67）は任意だが、6.3 inch の元になるので必ず撮る（反映するかは任意。display_types で外せる）。",
+    "アプリは iPhone のみ（TARGETED_DEVICE_FAMILY = 1。iPad では互換表示）なので、iPad 13 inch（APP_IPAD_PRO_3GEN_129）は撮らない。"
   ],
   "scenes": [
     { "file": "01_home", "scene": "home" },
@@ -39,13 +39,6 @@
       "label": "iPhone 6.9 inch",
       "devices": ["iPhone 17 Pro Max", "iPhone 16 Pro Max"],
       "sizes": ["1320x2868", "1290x2796", "1260x2736"],
-      "runsOn": "macos-latest",
-      "xcodeVersion": "26.6"
-    },
-    "APP_IPAD_PRO_3GEN_129": {
-      "label": "iPad 13 inch",
-      "devices": ["iPad Pro 13-inch (M5)", "iPad Pro 13-inch (M4)"],
-      "sizes": ["2064x2752", "2048x2732"],
       "runsOn": "macos-latest",
       "xcodeVersion": "26.6"
     }
