@@ -20,8 +20,12 @@ enum Metrics {
     static let contentMaxWidth: CGFloat = 600
 
     // カード
-    /// カードの列の数
+    /// カードの基本の列の数（列の数の候補が同じ大きさのときと、枚数を割り切れる候補が無いとき）
     static let cardColumns = 4
+    /// カードの列の数の候補（引き継ぎブックの「カードの並び」の 3〜5 列）。先のものほど優先する（同じ大きさなら 4 列）
+    static let cardColumnCandidates = [4, 3, 5]
+    /// 列の数を選ぶとき、カードの大きさが同じとみなす差（引き継ぎブックの `BoardView.columns(count:in:gap:)` の 0.5）
+    static let cardColumnTieTolerance: CGFloat = 0.5
     /// カードどうしのすき間（縦横とも）
     static let cardSpacing: CGFloat = 8
     /// カードの高さの、幅に対する割合の上限。行は使える高さで等分するが、これより縦に長くはしない（あまった高さは上下に分ける）。
