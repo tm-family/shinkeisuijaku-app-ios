@@ -70,8 +70,8 @@ enum Typography {
     static let parentsSectionTitle = TypographyToken(size: 17, face: .system(.heavy), relativeTo: .headline)
 
     // カードの文字は、カードの短辺に対する割合で大きさを決める
-    /// ひらがなカードの文字（短辺の 66%・丸ゴ）
-    static let cardLetterRatio: CGFloat = 0.66
+    /// ひらがなカードの文字（短辺の 88%・丸ゴ）
+    static let cardLetterRatio: CGFloat = 0.88
     /// ペアが揃うと現れる言葉（短辺の 15%・丸ゴ）
     static let cardWordRatio: CGFloat = 0.15
     /// カードの裏の「？」（短辺の 34%・800）

@@ -37,10 +37,14 @@ enum Metrics {
     static let cardBackDotSpacing: CGFloat = 18
     /// カードの裏の水玉の直径（引き継ぎブックに無いので、間隔の 3 分の 1 にした）
     static let cardBackDotDiameter: CGFloat = 6
-    /// 表のカードの絵の大きさ（カードの短辺に対する割合）
-    static let cardPictureRatio: CGFloat = 0.62
-    /// ペアが揃って言葉が現れたときの絵の大きさ（カードの短辺に対する割合。下に言葉を置く分だけ小さくする）
-    static let cardMatchedPictureRatio: CGFloat = 0.5
+    /// 表のカードの絵の一辺（カードの幅に対する割合。絵はぴったりの枠で描く）
+    static let cardPictureWidthRatio: CGFloat = 0.95
+    /// 表のカードの絵の一辺の上限（カードの高さに対する割合。横に広いカードで、高さが足りないとき）
+    static let cardPictureHeightRatio: CGFloat = 0.98
+    /// 言葉つきの絵（ひらがなコースの絵のカード）で、高さから引く言葉の分（カードの短辺に対する割合）
+    static let cardWordAreaRatio: CGFloat = 0.24
+    /// 言葉つきの絵と言葉のすき間（引き継ぎブックの `CardFront` の `VStack(spacing: 2)`）
+    static let cardWordSpacing: CGFloat = 2
 
     // ホーム（引き継ぎブックに値が無いものは、iPhone SE でスクロールせずに収まる大きさにした）
     /// ホームの背景の水玉の間隔（色は `Palette.homeBackgroundDot`）
