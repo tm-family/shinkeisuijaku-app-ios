@@ -105,6 +105,8 @@ struct CardView: View {
         _showsMatched = State(initialValue: isMatched)
     }
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         let motion = MotionPolicy(reduceMotion: reduceMotion)
         GeometryReader { proxy in
@@ -121,7 +123,7 @@ struct CardView: View {
                 .animation(motion.flipAnimation, value: isFaceUp)
         }
         .scaleEffect(matchPulse && motion.pulsesOnMatch ? Motion.matchScale : 1)
-        .shadow(color: Palette.cardShadow, radius: Metrics.cardShadowRadius, y: Metrics.cardShadowOffsetY)
+        .shadow(color: Palette.cardShadow, radius: Metrics.cardShadowRadius * layoutScale, y: Metrics.cardShadowOffsetY * layoutScale)
         // 揃ったら少しおいて緑にする。待つあいだに画面を離れたら（ゲームが変わったら）、待つのをやめる
         .task(id: isMatched) {
             await updateMatched(isMatched, motion: motion)
@@ -187,18 +189,24 @@ private struct CardFlip<Back: View, Front: View>: ViewModifier, Animatable {
 private struct CardBackSide: View {
     let shortSide: CGFloat
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        RoundedRectangle(cornerRadius: Metrics.cardCornerRadius)
+        RoundedRectangle(cornerRadius: Metrics.cardCornerRadius * layoutScale)
             .fill(Palette.cardBack)
             .overlay {
-                DotPattern(spacing: Metrics.cardBackDotSpacing, diameter: Metrics.cardBackDotDiameter, color: Palette.cardBackDot)
+                DotPattern(
+                    spacing: Metrics.cardBackDotSpacing * layoutScale,
+                    diameter: Metrics.cardBackDotDiameter * layoutScale,
+                    color: Palette.cardBackDot
+                )
             }
             .overlay {
                 Text(verbatim: "？")
                     .font(Typography.cardQuestion(shortSide: shortSide))
                     .foregroundStyle(Palette.cardBackText)
             }
-            .clipShape(RoundedRectangle(cornerRadius: Metrics.cardCornerRadius))
+            .clipShape(RoundedRectangle(cornerRadius: Metrics.cardCornerRadius * layoutScale))
     }
 }
 
@@ -208,8 +216,10 @@ private struct CardFrontSide: View {
     let appearance: CardAppearance
     let layout: CardFaceLayout
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        RoundedRectangle(cornerRadius: Metrics.cardCornerRadius)
+        RoundedRectangle(cornerRadius: Metrics.cardCornerRadius * layoutScale)
             .fill(appearance.backgroundColor)
             .overlay {
                 switch appearance.face {
@@ -219,7 +229,7 @@ private struct CardFrontSide: View {
                         .foregroundStyle(Palette.cardInk)
                 case let .picture(picture, word?):
                     // 言葉の場所ははじめからとっておき、揃ったら見せる（言葉が現れても絵が動かない）
-                    VStack(spacing: Metrics.cardWordSpacing) {
+                    VStack(spacing: Metrics.cardWordSpacing * layoutScale) {
                         IllustrationView(picture: picture, tight: true)
                             .frame(width: layout.pictureSideWithWord, height: layout.pictureSideWithWord)
                         Text(verbatim: word)

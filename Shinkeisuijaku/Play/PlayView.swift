@@ -23,8 +23,10 @@ struct PlayView: View {
     /// ゲームが変わる・画面を離れるのを待つ間隔（cancel されたらすぐ戻るので、長くてよい）
     private static let lifetimeCheckInterval: TimeInterval = 3600
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        VStack(spacing: Metrics.cardSpacing) {
+        VStack(spacing: Metrics.cardSpacing * layoutScale) {
             header
             CardGrid(session: session, haptics: haptics)
                 // ゲームが変わったらカードを作り直す（カードの番号は新しいゲームでも 0 から始まるため、
@@ -32,10 +34,10 @@ struct PlayView: View {
                 .id(ObjectIdentifier(session))
             footer
         }
-        .padding(.horizontal, Metrics.gameHorizontalPadding)
+        .padding(.horizontal, Metrics.gameHorizontalPadding * layoutScale)
         // iPad では中身の幅に上限を設けて中央に置く（カードが横に広がりすぎない）
         .contentWidthLimited()
-        .padding(.vertical, Metrics.cardSpacing)
+        .padding(.vertical, Metrics.cardSpacing * layoutScale)
         .background(Palette.background)
         // ゲームごとに始め、ゲームが変わる・画面を離れるまで待ってから、そのゲームの待っている処理
         // （全部見せる・ハズレを戻す・クリアまでの間）を止める
@@ -68,8 +70,8 @@ struct PlayView: View {
 
     /// コース名と「あと◯ペア」、説明の 1 行
     private var header: some View {
-        VStack(spacing: Metrics.pairCountVerticalPadding) {
-            HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing) {
+        VStack(spacing: Metrics.pairCountVerticalPadding * layoutScale) {
+            HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing * layoutScale) {
                 Text(session.course.name)
                     .lineLimit(1)
                     .appFont(Typography.note)
@@ -87,12 +89,12 @@ struct PlayView: View {
             }
             .lineLimit(1)
             .minimumScaleFactor(Metrics.textMinimumScale)
-            .padding(.vertical, Metrics.pairCountVerticalPadding)
-            .padding(.horizontal, Metrics.pairCountHorizontalPadding)
-            .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius))
+            .padding(.vertical, Metrics.pairCountVerticalPadding * layoutScale)
+            .padding(.horizontal, Metrics.pairCountHorizontalPadding * layoutScale)
+            .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius * layoutScale))
             .overlay {
-                RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius)
-                    .stroke(Palette.border, lineWidth: Metrics.borderWidth)
+                RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius * layoutScale)
+                    .stroke(Palette.border, lineWidth: Metrics.borderWidth * layoutScale)
             }
             // 数字と言葉を別々に読まないよう、札を 1 つにまとめて「ひらがな あと 4 ペア」と読む
             .accessibilityElement(children: .ignore)
@@ -113,20 +115,20 @@ struct PlayView: View {
 
     /// ヒントとやめる
     private var footer: some View {
-        HStack(spacing: Metrics.cardSpacing) {
+        HStack(spacing: Metrics.cardSpacing * layoutScale) {
             Button {
                 session.showHint()
             } label: {
-                HStack(spacing: Metrics.cardSpacing) {
+                HStack(spacing: Metrics.cardSpacing * layoutScale) {
                     HintEyesView()
-                        .frame(height: Metrics.hintIconHeight)
+                        .frame(height: Metrics.hintIconHeight * layoutScale)
                     Text("ヒント")
                         .appFont(Typography.button)
                         // 文字を大きくしても 1 語の途中で折り返さず、カードの場所を減らさないよう 1 行に縮める
                         .lineLimit(1)
                         .minimumScaleFactor(Metrics.textMinimumScale)
                 }
-                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
             }
             .buttonStyle(SurfaceButtonStyle())
             // 押せないあいだも、短いあいだ（ハズレを戻す・ヒント）は薄くしない（`PlayScreen.hintLooksEnabled`）
@@ -140,7 +142,7 @@ struct PlayView: View {
                     .appFont(Typography.button)
                     .lineLimit(1)
                     .minimumScaleFactor(Metrics.textMinimumScale)
-                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
             }
             .buttonStyle(SurfaceButtonStyle())
             // 全部揃った後は、クリアのダイアログを待つのであって、やめるには進めない
@@ -164,13 +166,15 @@ private struct CardGrid: View {
     let session: GameSession
     let haptics: any Haptics
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         GeometryReader { proxy in
             let cards = session.board.cards
-            let layout = CardGridLayout(cardCount: cards.count, available: proxy.size)
-            VStack(spacing: Metrics.cardSpacing) {
+            let layout = CardGridLayout(cardCount: cards.count, available: proxy.size, scale: layoutScale)
+            VStack(spacing: Metrics.cardSpacing * layoutScale) {
                 ForEach(0..<layout.rows, id: \.self) { row in
-                    HStack(spacing: Metrics.cardSpacing) {
+                    HStack(spacing: Metrics.cardSpacing * layoutScale) {
                         ForEach(cards.indices.filter { $0 / layout.columns == row }, id: \.self) { index in
                             cardButton(cards[index], index: index)
                                 .frame(width: layout.cardSize.width, height: layout.cardSize.height)
@@ -212,13 +216,15 @@ struct SurfaceButtonStyle: ButtonStyle {
         let configuration: Configuration
         @Environment(\.isEnabled) private var isEnabled
 
+        @Environment(\.layoutScale) private var layoutScale
+
         var body: some View {
             configuration.label
                 .foregroundStyle(Palette.text)
-                .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius))
+                .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius * layoutScale))
                 .overlay {
-                    RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius)
-                        .stroke(Palette.border, lineWidth: Metrics.borderWidth)
+                    RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius * layoutScale)
+                        .stroke(Palette.border, lineWidth: Metrics.borderWidth * layoutScale)
                 }
                 .opacity(ButtonOpacity.value(isPressed: configuration.isPressed, isEnabled: isEnabled))
         }
