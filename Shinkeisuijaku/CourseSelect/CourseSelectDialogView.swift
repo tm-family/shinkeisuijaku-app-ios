@@ -26,6 +26,8 @@ struct CourseSelectDialogView: View {
     /// 鍵の案内の文に VoiceOver のフォーカスがあるか（鍵の付いた難易度を押したら、案内へ移す）
     @AccessibilityFocusState private var isLockedGuideFocused: Bool
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         let options = CourseSelection.options(hasPass: hasPass)
         // 鍵の付いたものがあるときは、鍵の無い行にも鍵の分の場所を空けて、右の「6ペア」の位置をそろえる
@@ -35,7 +37,7 @@ struct CourseSelectDialogView: View {
                 .appFont(Typography.dialogTitle)
                 .foregroundStyle(Palette.text)
                 .accessibilityAddTraits(.isHeader)
-                .padding(.bottom, Metrics.cardSpacing)
+                .padding(.bottom, Metrics.cardSpacing * layoutScale)
             ForEach(options, id: \.difficulty) { option in
                 CourseDifficultyButton(option: option, reservesLockSpace: reservesLockSpace) {
                     // 案内を出したら、VoiceOver のフォーカスを案内の文へ移す（初めて出すときは、案内が出たときに案内の側で移す）
@@ -50,10 +52,10 @@ struct CourseSelectDialogView: View {
             Button(action: onClose) {
                 Text("とじる")
                     .appFont(Typography.button)
-                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
             }
             .buttonStyle(SurfaceButtonStyle())
-            .padding(.top, Metrics.cardSpacing)
+            .padding(.top, Metrics.cardSpacing * layoutScale)
             .accessibilityIdentifier("courseSelect.close")
         }
         .accessibilityIdentifier("courseSelect.dialog")
@@ -69,6 +71,8 @@ private struct CourseDifficultyButton: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         Button(action: action) {
             Group {
@@ -78,24 +82,24 @@ private struct CourseDifficultyButton: View {
                         name
                             .lineLimit(1)
                             .minimumScaleFactor(Metrics.textMinimumScale)
-                        HStack(spacing: Metrics.cardSpacing) {
+                        HStack(spacing: Metrics.cardSpacing * layoutScale) {
                             pairs
                             lock
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, Metrics.pairCountVerticalPadding)
+                    .padding(.vertical, Metrics.pairCountVerticalPadding * layoutScale)
                 } else {
-                    HStack(spacing: Metrics.cardSpacing) {
+                    HStack(spacing: Metrics.cardSpacing * layoutScale) {
                         name
-                        Spacer(minLength: Metrics.cardSpacing)
+                        Spacer(minLength: Metrics.cardSpacing * layoutScale)
                         pairs
                         lock
                     }
                 }
             }
-            .padding(.horizontal, Metrics.difficultyButtonHorizontalPadding)
-            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+            .padding(.horizontal, Metrics.difficultyButtonHorizontalPadding * layoutScale)
+            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         // 鍵のマークは絵だけなので、「ふつう 8ペア かぎ」と状態を言葉でまとめて読み上げる
@@ -124,10 +128,10 @@ private struct CourseDifficultyButton: View {
             LockShape()
                 // 鍵のマークはボタンの文字と同じ色（引き継ぎブックの 6 ページの見本の「8ペア」と同じ濃さ。コース選択とクリアでそろえる）
                 .fill(Palette.text)
-                .frame(width: Metrics.lockIconSize, height: Metrics.lockIconSize)
+                .frame(width: Metrics.lockIconSize * layoutScale, height: Metrics.lockIconSize * layoutScale)
         } else if reservesLockSpace {
             Color.clear
-                .frame(width: Metrics.lockIconSize, height: Metrics.lockIconSize)
+                .frame(width: Metrics.lockIconSize * layoutScale, height: Metrics.lockIconSize * layoutScale)
         }
     }
 }

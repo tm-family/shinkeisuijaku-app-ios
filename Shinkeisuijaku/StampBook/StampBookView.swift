@@ -15,11 +15,13 @@ struct StampBookView: View {
     /// 「ホームにもどる」を押したとき
     var onHome: () -> Void = {}
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         GeometryReader { proxy in
             // iPad では中身の幅に上限があるので、上限の幅からスタンプの大きさを決める
-            let width = min(proxy.size.width, Metrics.contentMaxWidth)
-            let diameter = StampBookLayout.diameter(forWidth: width - Metrics.screenHorizontalPadding * 2)
+            let width = min(proxy.size.width, Metrics.contentMaxWidth * layoutScale)
+            let diameter = StampBookLayout.diameter(forWidth: width - Metrics.screenHorizontalPadding * layoutScale * 2, scale: layoutScale)
             // 画面に入らないとき（iPhone SE で文字を大きくしたときなど）は、スクロールで全部見られる
             ScrollView {
                 content(diameter: diameter)
@@ -42,14 +44,14 @@ struct StampBookView: View {
 
     /// 見出し・集めた数・通常の枠・パス専用の枠（上から順に並べる）
     private func content(diameter: CGFloat) -> some View {
-        VStack(spacing: Metrics.stampBookSectionSpacing) {
+        VStack(spacing: Metrics.stampBookSectionSpacing * layoutScale) {
             Text("スタンプちょう")
                 .appFont(Typography.dialogTitle)
                 .foregroundStyle(Palette.text)
                 .accessibilityAddTraits(.isHeader)
             countBadge
             stampRows(layout.regularRows, columns: StampBookLayout.regularColumns, diameter: diameter, identifier: "stampBook.regular")
-            VStack(spacing: Metrics.stampBookSpacing) {
+            VStack(spacing: Metrics.stampBookSpacing * layoutScale) {
                 Text("とくべつな スタンプ")
                     .appFont(Typography.noteStrong)
                     .foregroundStyle(Palette.muted)
@@ -57,13 +59,13 @@ struct StampBookView: View {
                 stampRows(layout.passRows, columns: StampBookLayout.passColumns, diameter: diameter, identifier: "stampBook.pass")
             }
         }
-        .padding(.horizontal, Metrics.screenHorizontalPadding)
-        .padding(.vertical, Metrics.cardSpacing)
+        .padding(.horizontal, Metrics.screenHorizontalPadding * layoutScale)
+        .padding(.vertical, Metrics.cardSpacing * layoutScale)
     }
 
     /// 集めた数（「あつめた かず 5 / 12」。「あと◯ペア」と同じ形の札にし、数字は強調色で大きく）
     private var countBadge: some View {
-        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing) {
+        HStack(alignment: .firstTextBaseline, spacing: Metrics.cardSpacing * layoutScale) {
             Text("あつめた かず")
                 .appFont(Typography.pairCountLabel)
                 .foregroundStyle(Palette.text)
@@ -74,12 +76,12 @@ struct StampBookView: View {
         .lineLimit(1)
         // 文字を最大にしても数字が「…」で切れないよう、入らないときは縮める（「あと◯ペア」と同じ）
         .minimumScaleFactor(Metrics.textMinimumScale)
-        .padding(.vertical, Metrics.pairCountVerticalPadding)
-        .padding(.horizontal, Metrics.pairCountHorizontalPadding)
-        .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius))
+        .padding(.vertical, Metrics.pairCountVerticalPadding * layoutScale)
+        .padding(.horizontal, Metrics.pairCountHorizontalPadding * layoutScale)
+        .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius * layoutScale))
         .overlay {
-            RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius)
-                .stroke(Palette.border, lineWidth: Metrics.borderWidth)
+            RoundedRectangle(cornerRadius: Metrics.pairCountCornerRadius * layoutScale)
+                .stroke(Palette.border, lineWidth: Metrics.borderWidth * layoutScale)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: layout.countAccessibilityLabel))
@@ -93,9 +95,9 @@ struct StampBookView: View {
         diameter: CGFloat,
         identifier: String
     ) -> some View {
-        VStack(spacing: Metrics.stampBookSpacing) {
+        VStack(spacing: Metrics.stampBookSpacing * layoutScale) {
             ForEach(Array(rows.enumerated()), id: \.offset) { rowIndex, row in
-                HStack(spacing: Metrics.stampBookSpacing) {
+                HStack(spacing: Metrics.stampBookSpacing * layoutScale) {
                     ForEach(Array(row.enumerated()), id: \.offset) { columnIndex, entry in
                         let index = rowIndex * columns + columnIndex
                         StampView(slot: entry.slot, diameter: diameter)
@@ -114,12 +116,12 @@ struct StampBookView: View {
         Button(action: onHome) {
             Text("ホームにもどる")
                 .appFont(Typography.button)
-                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         .accessibilityIdentifier("stampBook.home")
-        .padding(.horizontal, Metrics.screenHorizontalPadding)
-        .padding(.vertical, Metrics.cardSpacing)
+        .padding(.horizontal, Metrics.screenHorizontalPadding * layoutScale)
+        .padding(.vertical, Metrics.cardSpacing * layoutScale)
         // ボタンは中身と同じ幅にし、下の帯の地は画面の幅いっぱいに敷く
         .contentWidthLimited()
         .background(Palette.background)

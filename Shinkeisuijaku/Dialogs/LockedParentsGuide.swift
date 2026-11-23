@@ -17,8 +17,10 @@ struct LockedParentsGuide: View {
     let isFocused: AccessibilityFocusState<Bool>.Binding
     let onOpenParents: () -> Void
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        VStack(spacing: Metrics.cardSpacing) {
+        VStack(spacing: Metrics.cardSpacing * layoutScale) {
             Text("おうちの方に あけてもらってね")
                 .appFont(Typography.noteStrong)
                 .foregroundStyle(Palette.text)

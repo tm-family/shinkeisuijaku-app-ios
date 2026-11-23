@@ -12,6 +12,8 @@ import SwiftUI
 struct DialogContainer<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         ZStack {
             Palette.dialogScrim
@@ -22,7 +24,7 @@ struct DialogContainer<Content: View>: View {
             GeometryReader { proxy in
                 ScrollView {
                     box
-                        .padding(.horizontal, Metrics.screenHorizontalPadding)
+                        .padding(.horizontal, Metrics.screenHorizontalPadding * layoutScale)
                         .frame(maxWidth: .infinity, minHeight: proxy.size.height)
                 }
                 .scrollBounceBehavior(.basedOnSize)
@@ -33,13 +35,13 @@ struct DialogContainer<Content: View>: View {
     }
 
     private var box: some View {
-        VStack(spacing: Metrics.cardSpacing) {
+        VStack(spacing: Metrics.cardSpacing * layoutScale) {
             content()
         }
-        .padding(.vertical, Metrics.dialogVerticalPadding)
-        .padding(.horizontal, Metrics.dialogHorizontalPadding)
-        .frame(maxWidth: Metrics.dialogMaxWidth)
-        .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.dialogCornerRadius))
+        .padding(.vertical, Metrics.dialogVerticalPadding * layoutScale)
+        .padding(.horizontal, Metrics.dialogHorizontalPadding * layoutScale)
+        .frame(maxWidth: Metrics.dialogMaxWidth * layoutScale)
+        .background(Palette.surface, in: RoundedRectangle(cornerRadius: Metrics.dialogCornerRadius * layoutScale))
     }
 }
 
@@ -64,12 +66,14 @@ struct PrimaryButtonStyle: ButtonStyle {
         let configuration: Configuration
         @Environment(\.isEnabled) private var isEnabled
 
+        @Environment(\.layoutScale) private var layoutScale
+
         var body: some View {
             configuration.label
                 .appFont(Typography.primaryButton)
                 .foregroundStyle(Palette.accentText)
-                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
-                .background(Palette.accent, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius))
+                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
+                .background(Palette.accent, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius * layoutScale))
                 .opacity(ButtonOpacity.value(isPressed: configuration.isPressed, isEnabled: isEnabled))
         }
     }
@@ -79,18 +83,29 @@ struct PrimaryButtonStyle: ButtonStyle {
 /// 押しているあいだは薄くする
 struct RoundButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .appFont(Typography.button)
-            .foregroundStyle(Palette.text)
-            .padding(.horizontal, Metrics.roundButtonHorizontalPadding)
-            .frame(minHeight: Metrics.roundButtonMinHeight)
-            .background(Palette.surface, in: Capsule())
-            .overlay {
-                Capsule()
-                    .stroke(Palette.border, lineWidth: Metrics.borderWidth)
-            }
-            .contentShape(Capsule())
-            // 丸いボタンは押せなくすることが無いので、押しているあいだだけ薄くする
-            .opacity(ButtonOpacity.value(isPressed: configuration.isPressed, isEnabled: true))
+        RoundButton(configuration: configuration)
+    }
+
+    /// 倍率（環境値）を読むため、見た目は View にする
+    private struct RoundButton: View {
+        let configuration: Configuration
+
+        @Environment(\.layoutScale) private var layoutScale
+
+        var body: some View {
+            configuration.label
+                .appFont(Typography.button)
+                .foregroundStyle(Palette.text)
+                .padding(.horizontal, Metrics.roundButtonHorizontalPadding * layoutScale)
+                .frame(minHeight: Metrics.roundButtonMinHeight * layoutScale)
+                .background(Palette.surface, in: Capsule())
+                .overlay {
+                    Capsule()
+                        .stroke(Palette.border, lineWidth: Metrics.borderWidth * layoutScale)
+                }
+                .contentShape(Capsule())
+                // 丸いボタンは押せなくすることが無いので、押しているあいだだけ薄くする
+                .opacity(ButtonOpacity.value(isPressed: configuration.isPressed, isEnabled: true))
+        }
     }
 }

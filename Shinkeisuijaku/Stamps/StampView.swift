@@ -42,6 +42,11 @@ enum StampStyle {
         }
     }
 
+    /// 点線（まだのスタンプ・パス専用の鍵・クリア画面のふち）の線。太さと線の長さ・間に倍率（`layoutScale`）を掛ける
+    static func dashedStroke(lineWidth: CGFloat, scale: CGFloat) -> StrokeStyle {
+        StrokeStyle(lineWidth: lineWidth * scale, dash: Metrics.stampDash.map { $0 * scale })
+    }
+
     /// 銀と金のふちの色と地の色
     static func rimColors(of rim: StampRim) -> (rim: Color, wash: Color) {
         switch rim {
@@ -54,11 +59,28 @@ enum StampStyle {
 /// スタンプ 1 つ（スタンプちょうの枠）。`diameter` の丸に描く
 struct StampView: View {
     let slot: StampSlot
-    var diameter: CGFloat = Metrics.stampBookMaxDiameter
+    /// 丸の直径。nil ならスタンプちょうの直径の上限（iPad の全画面では倍率を掛けた大きさ）
+    var diameter: CGFloat?
+
+    @Environment(\.layoutScale) private var layoutScale
+
+    /// 描く丸の直径
+    private var side: CGFloat {
+        diameter ?? Metrics.stampBookMaxDiameter * layoutScale
+    }
+
+    /// 丸の外側の影のぼかしとずれ
+    private var shadowRadius: CGFloat {
+        Metrics.stampShadowRadius * layoutScale
+    }
+
+    private var shadowOffsetY: CGFloat {
+        Metrics.stampShadowOffsetY * layoutScale
+    }
 
     var body: some View {
         content
-            .frame(width: diameter, height: diameter)
+            .frame(width: side, height: side)
             .accessibilityHidden(true)
     }
 
@@ -69,21 +91,21 @@ struct StampView: View {
                 Circle().fill(Palette.artWhite)
                 Circle().fill(StampStyle.mainColor(of: picture).opacity(Palette.stampWashOpacity))
                 IllustrationView(picture: picture)
-                    .frame(width: diameter * Metrics.stampPictureRatio)
+                    .frame(width: side * Metrics.stampPictureRatio)
             }
             // 中の絵や文字に影を付けず、丸の外側にだけ付ける
             .compositingGroup()
-            .shadow(color: Palette.stampShadow, radius: Metrics.stampShadowRadius, y: Metrics.stampShadowOffsetY)
+            .shadow(color: Palette.stampShadow, radius: shadowRadius, y: shadowOffsetY)
         case let .owned(.pass(course, rim)):
             let colors = StampStyle.rimColors(of: rim)
             ZStack {
                 Circle().fill(colors.wash)
-                Circle().strokeBorder(colors.rim, lineWidth: Metrics.stampRimWidth)
+                Circle().strokeBorder(colors.rim, lineWidth: Metrics.stampRimWidth * layoutScale)
                 courseSymbol(course)
             }
             // 中の絵や文字に影を付けず、丸の外側にだけ付ける
             .compositingGroup()
-            .shadow(color: Palette.stampShadow, radius: Metrics.stampShadowRadius, y: Metrics.stampShadowOffsetY)
+            .shadow(color: Palette.stampShadow, radius: shadowRadius, y: shadowOffsetY)
         case .empty:
             dashedCircle(Palette.stampEmpty)
         case .locked:
@@ -91,7 +113,7 @@ struct StampView: View {
                 dashedCircle(Palette.stampGold)
                 LockShape()
                     .fill(Palette.stampLock)
-                    .frame(width: diameter * Metrics.stampLockRatio, height: diameter * Metrics.stampLockRatio)
+                    .frame(width: side * Metrics.stampLockRatio, height: side * Metrics.stampLockRatio)
             }
         }
     }
@@ -101,16 +123,16 @@ struct StampView: View {
         switch course {
         case .animals:
             IllustrationView(picture: .cat)
-                .frame(width: diameter * Metrics.stampPictureRatio)
+                .frame(width: side * Metrics.stampPictureRatio)
         case .hiragana:
             HiraganaSymbolView()
-                .frame(width: diameter, height: diameter)
+                .frame(width: side, height: side)
         }
     }
 
     private func dashedCircle(_ color: Color) -> some View {
         Circle()
-            .strokeBorder(color, style: StrokeStyle(lineWidth: Metrics.stampDashedLineWidth, dash: Metrics.stampDash))
+            .strokeBorder(color, style: StampStyle.dashedStroke(lineWidth: Metrics.stampDashedLineWidth, scale: layoutScale))
     }
 }
 
@@ -120,14 +142,16 @@ struct ClearStampView: View {
     /// 読み上げ（もらったスタンプの名前。`ClearOutcome.stampAccessibilityLabel`）。nil なら飾りとして読み上げない
     var accessibilityLabel: String?
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
-        StampView(slot: .owned(stamp), diameter: Metrics.clearStampDiameter)
-            .padding(Metrics.clearStampRingGap)
+        StampView(slot: .owned(stamp), diameter: Metrics.clearStampDiameter * layoutScale)
+            .padding(Metrics.clearStampRingGap * layoutScale)
             .overlay {
                 Circle()
                     .strokeBorder(
                         Palette.accent,
-                        style: StrokeStyle(lineWidth: Metrics.clearStampBorderWidth, dash: Metrics.stampDash)
+                        style: StampStyle.dashedStroke(lineWidth: Metrics.clearStampBorderWidth, scale: layoutScale)
                     )
             }
             .rotationEffect(.degrees(Metrics.clearStampRotationDegrees))

@@ -39,6 +39,8 @@ struct ParentalGateView: View {
         self.onCancel = onCancel
     }
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         DialogContainer {
             Text("保護者の方へ")
@@ -65,7 +67,7 @@ struct ParentalGateView: View {
             Button(action: onCancel) {
                 Text("やめる")
                     .appFont(Typography.button)
-                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                    .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
             }
             .buttonStyle(SurfaceButtonStyle())
             .accessibilityIdentifier("parentalGate.cancel")
@@ -90,11 +92,11 @@ struct ParentalGateView: View {
         Text(gate.input.isEmpty ? " " : gate.input.text)
             .appFont(Typography.parentalGateNumber)
             .foregroundStyle(Palette.accent)
-            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
-            .background(Palette.background, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius))
+            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
+            .background(Palette.background, in: RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius * layoutScale))
             .overlay {
-                RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius)
-                    .stroke(Palette.border, lineWidth: Metrics.borderWidth)
+                RoundedRectangle(cornerRadius: Metrics.buttonCornerRadius * layoutScale)
+                    .stroke(Palette.border, lineWidth: Metrics.borderWidth * layoutScale)
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("答え")
@@ -104,7 +106,7 @@ struct ParentalGateView: View {
 
     /// テンキー（0〜9・消す・決定）。ボタンの高さは通常のボタンと同じ 52（44 以上）
     private var keypad: some View {
-        Grid(horizontalSpacing: Metrics.cardSpacing, verticalSpacing: Metrics.cardSpacing) {
+        Grid(horizontalSpacing: Metrics.cardSpacing * layoutScale, verticalSpacing: Metrics.cardSpacing * layoutScale) {
             ForEach(Self.digitRows, id: \.self) { row in
                 GridRow {
                     ForEach(row, id: \.self) { digit in
@@ -119,7 +121,7 @@ struct ParentalGateView: View {
                 } label: {
                     Text("消す")
                         .appFont(Typography.button)
-                        .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                        .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
                 }
                 .buttonStyle(SurfaceButtonStyle())
                 .accessibilityLabel("1 文字消す")
@@ -140,7 +142,7 @@ struct ParentalGateView: View {
         } label: {
             Text(verbatim: String(digit))
                 .appFont(Typography.difficultyButton)
-                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         .accessibilityIdentifier("parentalGate.key.\(digit)")

@@ -37,17 +37,19 @@ struct ClearDialogView: View {
     /// 鍵の案内の文に VoiceOver のフォーカスがあるか（鍵の付いた次の難易度を押したら、案内へ移す）
     @AccessibilityFocusState private var isLockedGuideFocused: Bool
 
+    @Environment(\.layoutScale) private var layoutScale
+
     var body: some View {
         DialogContainer {
             ClearStampView(stamp: outcome.awardedStamp ?? .regular(.star), accessibilityLabel: outcome.stampAccessibilityLabel)
-                .padding(.bottom, Metrics.cardSpacing)
+                .padding(.bottom, Metrics.cardSpacing * layoutScale)
             Text("よくできました！")
                 .appFont(Typography.dialogTitle)
                 .foregroundStyle(Palette.text)
             Text(outcome.awardedStamp == nil ? "いっぱい あつめたね すごい！" : "あたらしい スタンプを ゲット")
                 .appFont(Typography.body)
                 .foregroundStyle(Palette.muted)
-                .padding(.bottom, Metrics.cardSpacing)
+                .padding(.bottom, Metrics.cardSpacing * layoutScale)
             Button("もう一回あそぶ") {
                 onAction(.playAgain)
             }
@@ -75,7 +77,7 @@ struct ClearDialogView: View {
                         .appFont(Typography.note)
                         .foregroundStyle(Palette.muted)
                         .underline()
-                        .frame(minHeight: Metrics.minTapTarget)
+                        .frame(minHeight: Metrics.minTapTarget * layoutScale)
                 }
                 .accessibilityIdentifier("clear.parents")
             }
@@ -93,17 +95,17 @@ struct ClearDialogView: View {
                 isLockedGuideFocused = true
             }
         } label: {
-            HStack(spacing: Metrics.cardSpacing) {
+            HStack(spacing: Metrics.cardSpacing * layoutScale) {
                 Text("\(next.name)で あそぶ")
                     .appFont(Typography.button)
                 if locked {
                     LockShape()
                         // 鍵のマークはボタンの文字と同じ色（引き継ぎブックの 6 ページの見本の「8ペア」と同じ濃さ。コース選択とクリアでそろえる）
                         .fill(Palette.text)
-                        .frame(width: Metrics.lockIconSize, height: Metrics.lockIconSize)
+                        .frame(width: Metrics.lockIconSize * layoutScale, height: Metrics.lockIconSize * layoutScale)
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+            .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         // 鍵のマークは絵だけなので、「ふつうで あそぶ かぎ」と状態を言葉でまとめ、押すと案内が出ることをヒントで伝える
@@ -116,7 +118,7 @@ struct ClearDialogView: View {
         Button(action: action) {
             Text(title)
                 .appFont(Typography.button)
-                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight)
+                .frame(maxWidth: .infinity, minHeight: Metrics.buttonHeight * layoutScale)
         }
         .buttonStyle(SurfaceButtonStyle())
         .accessibilityIdentifier(identifier)
