@@ -2,7 +2,8 @@ Shinkeisuijaku - Notes for App Review
 A memory (concentration) card game for young children in the Kids category (age band: 5 and under). The UI is Japanese only; labels are quoted as shown, with English in [square brackets].
 
 1. SCREEN RECORDING
-A screen recording from a physical iPhone running the latest iOS is attached to the App Review Information. It starts with the first launch and shows: the first game starting without the home screen, clearing it, the home screen, the stamp book, a locked difficulty, the parental gate, and the purchase and restore of the In-App Purchase.
+A screen recording from a physical iPhone (iPhone 13) is attached. Starting from the Home Screen, it shows: the first game starting without the home screen, clearing it, the home screen, the stamp book, the locked Normal and Hard, the parental gate, the price, the sandbox purchase, the Normal game starting right after it, and the purchased state.
+"購入を復元" [Restore Purchases] is shown before the purchase. After it, "ぜんぶ遊べるパスは購入済みです" [The pass is purchased] replaces the buy and restore buttons.
 The app has no account registration, login, or user-generated content. It has one In-App Purchase (section 3).
 
 2. PURPOSE AND TARGET AUDIENCE
@@ -22,11 +23,11 @@ To test it, either:
 Parental gate: the "保護者の方へ" [For parents] dialog asks for the sum of a 2-digit and a 1-digit number shown on screen (e.g. "12 ＋ 7 ＝ ？", answer 19), entered with the number pad and "決定" [OK]. A wrong answer changes the question. The price, purchase, restore, and external links appear only after the gate. Children's screens never show the price.
 
 4. EXTERNAL SERVICES
-None, except Apple's StoreKit for the price, purchase, and restore. The app makes no network requests of its own and works offline. No third-party SDKs, advertising, analytics, crash reporting, or tracking. Play data (stamps, cached purchase state, last course and difficulty, first-clear flag) is stored only on the device.
+None, except Apple's StoreKit for the price, purchase, and restore. The app makes no network requests of its own and works offline. No third-party SDKs, advertising, analytics, crash reporting, or tracking. Play data is stored only on the device.
 The only external links are the privacy policy and the contact form on the "おうちの方へ" [For parents] screen, reachable only after the parental gate. They open in Safari; there is no in-app browser.
 
 5. REGIONAL DIFFERENCES
 None. The features and content are the same in all regions. The app is distributed in Japan only, as it is Japanese only.
 
 6. REGULATED INDUSTRY / THIRD-PARTY MATERIAL
-Not a regulated industry, and no third-party protected material. All illustrations (animals, fruits, a star, and the stamps) are original artwork made for this app and drawn in code. Text uses the system fonts and one bundled open-source font, Zen Maru Gothic Bold (SIL Open Font License 1.1; its license text is included in the app).
+Not a regulated industry, and no third-party protected material. All illustrations are original artwork drawn in code for this app. Text uses the system fonts and one bundled open-source font, Zen Maru Gothic Bold (SIL Open Font License 1.1; its license text is included in the app).
