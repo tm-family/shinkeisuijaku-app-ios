@@ -1,33 +1,32 @@
 Shinkeisuijaku - Notes for App Review
-A memory (concentration) card game for young children in the Kids category (age band: 5 and under). The UI is Japanese only; labels are quoted as shown, with English in [square brackets].
+A memory (concentration) card game for young children in the Kids Category (age band: 5 and under). The UI is Japanese only; labels are quoted as shown, with English in [square brackets].
 
 1. SCREEN RECORDING
-A screen recording from a physical iPhone (iPhone 13) is attached. Starting from the Home Screen, it shows: the first game starting without the home screen, clearing it, the home screen, the stamp book, the locked Normal and Hard, the parental gate, the price, the sandbox purchase, the Normal game starting right after it, and the purchased state.
-"購入を復元" [Restore Purchases] is shown before the purchase. After it, "ぜんぶ遊べるパスは購入済みです" [The pass is purchased] replaces the buy and restore buttons.
-The app has no account registration, login, or user-generated content. It has one In-App Purchase (section 3).
+The attached recording from a physical iPhone (iPhone 13) starts from the Home Screen and shows: the first game starting without the home screen, clearing it, the home screen, the stamp book, the locked Normal and Hard, the parental gate, the price, the sandbox purchase, the Normal game starting right after it, and the purchased state.
+No account, login, or user-generated content. One In-App Purchase (section 3).
 
 2. PURPOSE AND TARGET AUDIENCE
-An ad-free memory game for children aged 5 and under, to play alone or with a parent or grandparent. Children turn over cards to find pairs in two courses: "どうぶつ" [Animals] (the same picture) and "ひらがな" [Hiragana] (a hiragana letter and a picture, to get familiar with letters and words).
-It does not pressure children: no timer, time limit, move or mistake count, score, or ranking. A wrong pair just turns back over, with no "X" mark or warning sound. The app has no sound or voice.
+An ad-free memory game for children aged 5 and under. Children turn over cards to find pairs in two courses: "どうぶつ" [Animals] (the same picture) and "ひらがな" [Hiragana] (a hiragana letter and a picture).
+It does not pressure children: no timer, move or mistake count, score, or ranking. A wrong pair just turns back over, with no "X" mark or warning sound. The app has no sound or voice.
 
 3. HOW TO ACCESS THE MAIN FEATURES
-No login, account, credentials, or sample files are required.
-First launch: until the first game is cleared, the app skips the home screen and starts a 6-pair "どうぶつ" [Animals] game right away. After the first clear, it starts from the home screen. (To reach home without clearing, tap "やめる" [Quit], then "やめる" [Quit] in the alert.)
-1. Find all pairs. "ヒント" [Hint] shows all cards for about a second. The clear dialog "よくできました！" [Well done!] gives a stamp.
-2. Tap "ホームにもどる" [Back to home]. On home, "あそぶ" [Play] starts the last game again and "スタンプちょう" [Stamp book] shows the stamps.
-3. "やさしい" [Easy] (6 pairs) is free in both courses. "ふつう" [Normal] (8 pairs) and "むずかしい" [Hard] (10 pairs) need a one-time purchase.
-In-App Purchase: product ID jp.shilokuma.Shinkeisuijaku.pass (Non-Consumable, "ぜんぶ遊べるパス" [All-access pass]). It unlocks Normal and Hard in both courses and their special stamps.
-To test it, either:
-  a. Home > under "ほかの あそびかた" [Other ways to play], tap "どうぶつ" [Animals] > tap the locked "ふつう" [Normal] > "おうちの方に あけてもらってね" [Ask a grown-up to unlock it] > "おうちの方へ" [For parents] > parental gate > "購入する" [Buy]. After the purchase, that game starts.
-  b. Home > "おうちの方へ" [For parents] at the top right > parental gate > "購入する" [Buy] or "購入を復元" [Restore Purchases].
-Parental gate: the "保護者の方へ" [For parents] dialog asks for the sum of a 2-digit and a 1-digit number shown on screen (e.g. "12 ＋ 7 ＝ ？", answer 19), entered with the number pad and "決定" [OK]. A wrong answer changes the question. The price, purchase, restore, and external links appear only after the gate. Children's screens never show the price.
+First launch: until the first game is cleared, the app skips the home screen and starts a 6-pair "どうぶつ" [Animals] game. After that, it starts from the home screen. (To reach home without clearing, tap "やめる" [Quit], then "やめる" [Quit] in the alert.)
+"ヒント" [Hint] shows all cards for about a second. Clearing a game gives a stamp; "スタンプちょう" [Stamp book] on home shows them.
+"やさしい" [Easy] (6 pairs) is free. "ふつう" [Normal] (8 pairs) and "むずかしい" [Hard] (10 pairs) need the In-App Purchase jp.shilokuma.Shinkeisuijaku.pass (Non-Consumable, "ぜんぶ遊べるパス" [All-access pass]). To test it, either:
+  a. Home > "おうちの方へ" [For parents] at the top right > parental gate > "購入する" [Buy] or "購入を復元" [Restore Purchases].
+  b. Home > "どうぶつ" [Animals] under "ほかの あそびかた" [Other ways to play] > the locked "ふつう" [Normal] > "おうちの方に あけてもらってね" [Ask a grown-up to unlock it] > "おうちの方へ" [For parents] > parental gate > "購入する" [Buy]. After the purchase, that game starts.
+After the purchase, "ぜんぶ遊べるパスは購入済みです" [The pass is purchased] replaces the buy and restore buttons.
+Parental gate: enter the sum of a 2-digit and a 1-digit number (e.g. "12 ＋ 7 ＝ ？", answer 19) with the number pad and tap "決定" [OK]. A wrong answer changes the question. The price, purchase, restore, and external links appear only after the gate.
 
-4. EXTERNAL SERVICES
-None, except Apple's StoreKit for the price, purchase, and restore. The app makes no network requests of its own and works offline. No third-party SDKs, advertising, analytics, crash reporting, or tracking. Play data is stored only on the device.
-The only external links are the privacy policy and the contact form on the "おうちの方へ" [For parents] screen, reachable only after the parental gate. They open in Safari; there is no in-app browser.
+4. KIDS CATEGORY (GUIDELINE 1.3)
+- Third-party analytics: none. No analytics, crash reporting, tracking, or other third-party SDKs; only Apple's frameworks.
+- Third-party advertising: none.
+- Data shared with third parties: none. The app makes no network requests of its own and works offline. It uses only Apple's StoreKit for the price, purchase, and restore.
+- Other data collection: none. No personal information or device identifiers (IDFA, IDFV). Only the stamps, the last course and difficulty, whether the first game was cleared, and a cached purchase flag are stored on the device (UserDefaults); they never leave it. Privacy manifest: no tracking, no collected data. App Privacy: "Data Not Collected".
+- External links: only the privacy policy and a contact form (Google Forms) on the "おうちの方へ" [For parents] screen, after the parental gate. They open in Safari; there is no in-app browser.
 
 5. REGIONAL DIFFERENCES
-None. The features and content are the same in all regions. The app is distributed in Japan only, as it is Japanese only.
+None. Distributed in Japan only, as the app is Japanese only.
 
 6. REGULATED INDUSTRY / THIRD-PARTY MATERIAL
 Not a regulated industry, and no third-party protected material. All illustrations are original artwork drawn in code for this app. Text uses the system fonts and one bundled open-source font, Zen Maru Gothic Bold (SIL Open Font License 1.1; its license text is included in the app).
